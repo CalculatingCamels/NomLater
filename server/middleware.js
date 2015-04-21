@@ -1,13 +1,10 @@
-
 var bodyParser  = require('body-parser');
-var morgan = require('morgan');
 
 module.exports = function (app, express) {
   // Express 4 allows us to use multiple routers with their own configurations
   var userRouter = express.Router();
   var eventsRouter = express.Router();
 
-  app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
   

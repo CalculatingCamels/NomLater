@@ -1,4 +1,4 @@
-angular.module('lunchCorgi.events', [])
+angular.module('nomLater.events', [])
 
 .controller('EventsController', function ($scope, $window, $location, Events) {
 
