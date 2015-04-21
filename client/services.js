@@ -60,7 +60,7 @@ angular.module('nomLater.services', [])
     return $http({
         method: 'POST',
         url: '/api/signin',
-        data: resp.code
+        data: resp
       }).then(function (resp) {
         return resp.data.token;
       })

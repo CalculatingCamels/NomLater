@@ -16,8 +16,10 @@ angular.module('nomLater.signup', ['ngRoute'])
 
   $scope.signInButton = function() {
     auth2.grantOfflineAccess({'redirect_uri' : 'postmessage'}).then(function(resp) {
+      console.log(resp);
       Users.signin(resp)
         .then(function (token) {
+          console.log(token);
           $window.localStorage.setItem('com.corgi', token);
           $location.path('/');
         })
