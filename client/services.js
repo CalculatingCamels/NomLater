@@ -55,30 +55,21 @@ angular.module('nomLater.services', [])
 
 })
 .factory('Users', function($http){
-  var signup = function(user){
-    return $http({
-      method: 'POST',
-      url: '/api/users/signup',
-      data: user
-    }).then(function (resp) {
-      return resp.data.token;
-    });
-  }
 
-  var signin = function(user) {
+  var signin = function(resp) {
     return $http({
-      method: 'POST',
-      url: '/api/users/signin',
-      data: user
-    }).then(function (resp) {
-      return resp.data.token;
-    });    
+        method: 'POST',
+        url: '/api/signin',
+        data: resp.code
+      }).then(function (resp) {
+        return resp.data.token;
+      })
   }
 
   return {
-    signup: signup,
-    signin: signin
+    signin: signin,
   }
+
 })
 /* This custom Angular filter should produce our datetime object in the "from now" format
 popular in other apps */
