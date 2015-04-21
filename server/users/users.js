@@ -11,7 +11,7 @@ autoIncrement.initialize(db);  // required to get the tables to auto-increment f
 
 var UserSchema = new mongoose.Schema({
     userID : { type: Number, ref: 'userID'},
-    name : String,
+    name : String,x
     password : String,
     eventIDs: [],
     salt: String

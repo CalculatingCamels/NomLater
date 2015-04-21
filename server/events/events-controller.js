@@ -27,7 +27,7 @@ module.exports = {
     var iso = (new Date()).toISOString();
     
     // ...for testing, we're just fetching everything.
-    var options = { 'sort' : {'datetime': 1}, 'limit': 10}
+    var options = {'sort': {'datetime': 1}, 'limit': 10}
     var getEvents = DB.collection('corgievent').find({ 'datetime': { $gt: iso}})
     // var getEvents = DB.collection('corgievent').find({ 'datetime': { $gt: iso}},options)
       // then sort time by ascending so we can get the events happening next...
