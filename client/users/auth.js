@@ -40,4 +40,21 @@ angular.module('nomLater.signup', ['ngRoute'])
     $location.path('/signin');
   }
 
+  $scope.signInButton = function() {
+    auth2.grantOfflineAccess({'redirect_uri' : 'postmessage'}).then(function(resp) {
+      console.log(resp);
+      $http({
+        method: 'POST',
+        url: '/api/users/signin',
+        data: resp.code
+      }).then(function (token) {
+        $window.localStorage.setItem('com.corgi', token);
+        $location.path('/');
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    });
+  }
+
 });

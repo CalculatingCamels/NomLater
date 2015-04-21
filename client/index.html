@@ -2,19 +2,22 @@
 <html lang="en" ng-app="nomLater" class="no-js">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="/bower_components/html5-boilerplate/css/normalize.css">
-    <link rel="stylesheet" href="/bower_components/html5-boilerplate/css/main.css">
-    <title>LunchCorgi App</title>
+    <title>NomLater App</title>
 
+    <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+    <script>
+      function start() {
+        gapi.load('auth2', function() {
+          auth2 = gapi.auth2.init({
+            client_id : "1018800213856-k8g9toetpgsti0k09jt035cf0hou6har.apps.googleusercontent.com"
+          });
+        });
+      }
+
+    </script>
+    
     <link rel="stylesheet" href="/styles/app.css">
 
-    <script src ="/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
-    <script src ='/bower_components/angular/angular.js'></script>
-    <script src ='/bower_components/angular-route/angular-route.js'></script>
-    <script src ='/app.js'></script>
-    <script src ='/services.js'></script>
-    <script src ='/users/auth.js'></script>
-    <script src ='/events/events.js'></script>
   </head>
 
   <body>
@@ -26,5 +29,12 @@
 
     <div ng-view></div>
 
+    <script src ="/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+    <script src ='/bower_components/angular/angular.js'></script>
+    <script src ='/bower_components/angular-route/angular-route.js'></script>
+    <script src ='/app.js'></script>
+    <script src ='/services.js'></script>
+    <script src ='/users/auth.js'></script>
+    <script src ='/events/events.js'></script>
   </body>
 </html>
