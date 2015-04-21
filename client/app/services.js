@@ -1,4 +1,4 @@
-angular.module('lunchCorgi.services', [])
+angular.module('nomLater.services', [])
 
 .factory('Events', function($http) {
   // these factory functions can be tested in the console with the following syntax (and similar stuff):

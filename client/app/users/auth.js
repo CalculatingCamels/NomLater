@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('lunchCorgi.signup', ['ngRoute'])
+angular.module('nomLater.signup', ['ngRoute'])
 
 .controller('SignUpCtrl', function ($scope, $window, $location, Users) {
   $scope.user = {};

@@ -1,17 +1,17 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-var lunchCorgi = angular.module('lunchCorgi', [
-  'ngRoute',
-  'lunchCorgi.services',
-  'lunchCorgi.events',
-  'lunchCorgi.signup'
-  ]).
-config(['$routeProvider', function($routeProvider) {
+var nomLater = angular.module('nomLater', ['ngRoute','nomLater.services','nomLater.events','nomLater.signup']);
+
+nomLater.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
       when('/', {
         templateUrl: 'client/app/events/eventsPage.html',
         controller: 'EventsController'
+    }).
+      when('/users/:user_id', {
+        templateUrl: 'client/app/users/profile.html',
+        controller: 'profileCtrl'
     }).
       when('/signup', {
         templateUrl: 'client/app/users/signup.html',
