@@ -6,19 +6,19 @@ var nomLater = angular.module('nomLater', ['ngRoute','nomLater.services','nomLat
 nomLater.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
       when('/', {
-        templateUrl: 'client/app/events/eventsPage.html',
+        templateUrl: '/events/eventsPage.html',
         controller: 'EventsController'
     }).
       when('/users/:user_id', {
-        templateUrl: 'client/app/users/profile.html',
+        templateUrl: '/users/profile.html',
         controller: 'profileCtrl'
     }).
       when('/signup', {
-        templateUrl: 'client/app/users/signup.html',
+        templateUrl: '/users/signup.html',
         controller: 'SignUpCtrl'
     }).
       when('/signin', {
-        templateUrl: 'client/app/users/signin.html',
+        templateUrl: '/users/signin.html',
         controller: 'SignUpCtrl'
     }).otherwise({
         redirectTo: '/'

@@ -1,6 +1,7 @@
 angular.module('nomLater.events', [])
 
 .controller('EventsController', function ($scope, $window, $location, Events) {
+
   $scope.event = {}
 
   //if $scope.invalid is true, it will display an error message in the view
@@ -43,8 +44,8 @@ angular.module('nomLater.events', [])
 
   $scope.initNewEventForm = function() {
     $scope.newEvent = {}
-    $scope.newEvent.description
-    $scope.newEvent.location
+    $scope.newEvent.description = 'Describe the event.'
+    $scope.newEvent.location = 'Where is the event?'
     $scope.newEvent.time = (new Date()).toTimeString().substr(0,5)
     $scope.newEvent.date = new Date(new Date() + new Date().getTimezoneOffset()*60000).toISOString().substr(0,10)    
   }
