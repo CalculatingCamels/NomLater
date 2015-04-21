@@ -1,11 +1,4 @@
 <div id='signin' ng-controller = "SignUpCtrl">
-   <h1>Sign in to find lunch companions now!</h1>
-   <h2>If you don't have an account, <a href="#/signup">sign up <strong>here!</strong>
-   </a></h2>
-  <form name="signinForm" ng-submit='signin()'>
-     <input type='text' ng-model='user.username' required>
-     <input type='password' ng-model='user.password' required>
-     <button class="signin">Sign In</button>
-  </form> <br>
+  <h1>Sign in with Google to find lunch companions now!</h1>
   <button id="signinButton" ng-click="signInButton()">Sign in with Google</button>
 </div>
