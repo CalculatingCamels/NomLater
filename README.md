@@ -32,6 +32,15 @@ To get started with the database, there must be at least one user and one event.
  
 Unless the project is upgraded to be used with Gulp or Grunt, the Mongo server must be started before the Node.js server is started.  Otherwise, Node.js server will produce 'process.nextTick()' error.
 
+To install mongodb:
+brew update
+brew install mongodb
+sudo mkdir -p /data/db
+sudo chown -R `id -u` /data/db
+
+To launch mongodb:
+mongod --port 27017
+
 Server
 ------
 
