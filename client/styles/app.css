@@ -76,9 +76,14 @@
 
 .google-signin {
   background-color: #4d90fe;
-  border-color: none;
+  border: none;
+  border-radius:2px;
   color: white;
   padding: 5px;
+}
+
+.google-signin:hover {
+  background-color: 
 }
 
 .brand-fill {
@@ -90,6 +95,18 @@
   width: 80%;
   border-right: 1px solid black;
   border-left: 1px solid black;
+}
+
+.footer {
+  font: Courier;
+  text-align: center;
+  font-size: 0.7em;
+  position:absolute;
+  bottom:0;
+  width:100%;
+}
+.footer p{
+  margin:0;
 }
 
 
