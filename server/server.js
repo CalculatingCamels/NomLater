@@ -1,19 +1,33 @@
+var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var bcrypt = require('bcrypt-nodejs');
 var q = require('q');
 var jwt = require('jwt-simple');
 var mongo = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
- 
+var passport = require('passport'), GoogleStrategy = require('passport-google-oauth2').Strategy;
+var MongoStore = require('connect-mongo')(session);
+
 var app = express();
  
 app.use(express.static('./client'));
- 
-app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(bodyParser.json());
- 
+app.use(cookieParser());
+
+app.use(session({ 
+  secret: 'nomlater',
+  saveUninitialized: true,
+  resave: true,
+  store: new MongoStore({url: 'mongodb://localhost:27017/nomlater'})
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 var connectdb = function(cb){
   mongo.connect('mongodb://localhost:27017/nomlater', function(err, db){
     if(err) return console.log(err);
@@ -21,13 +35,66 @@ var connectdb = function(cb){
     cb(db);
   });
 };
- 
- 
-app.post('/api/signin', function(req, res){
-  //req.body.PARAM
+
+passport.serializeUser(function(user, done) {
+  console.log('serialize user object', user);
   connectdb(function(db){
-    res.status(200).json({'token':'shit'})
+    db.collection('users').find({googleId: user.id}).toArray(function (err, result) {
+      if(result.length === 0){
+        //User isn't in the database yet (FIRST TIMER!)
+        //Insert data is the first thing stored for users
+        var insertData = [{googleId: user.id, displayName: user.displayName}]
+        db.collection('users').insert(insertData, function(err, result){
+          done(null, insertData)
+        });
+      } else {
+        //User is already in the database, just return their data
+        console.log('ALREADY EXISTING USER DATA', result)
+        done(null, result);
+      }
+    });
   });
+});
+
+passport.deserializeUser(function(obj, done) {
+  console.log('deserialize user object', obj);
+  connectdb(function(db){
+    db.collection('users').find({googleId: obj.id}).toArray(function (err, result) {
+      done(null, obj);
+    });
+  });
+});
+
+passport.use(new GoogleStrategy({
+    clientID: '1018800213856-k8g9toetpgsti0k09jt035cf0hou6har.apps.googleusercontent.com',
+    clientSecret: 'sOSsJEp1p6xMx-CBY7xtfvCQ',
+    callbackURL: "http://localhost:3000/auth/google/callback",
+    passReqToCallback: true
+  },
+  function(request, accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    return done(null, profile);
+  }
+));
+
+app.get('/api/authtest', function(req, res){
+  res.status(200).json(req.isAuthenticated());
+})
+
+app.get('/auth/google',
+  passport.authenticate('google', {scope: 
+    ['https://www.googleapis.com/auth/userinfo.profile'] }
+));
+
+app.get( '/auth/google/callback', 
+    passport.authenticate('google', { 
+        successRedirect: '/',
+        failureRedirect: '/#/signin'
+}));
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
 });
  
 app.route('/api/events')
@@ -49,6 +116,7 @@ app.route('/api/events')
   })
   .put(function(req, res){
     //add a User's ID to the EVENT row
+    //EVENTS HAVE MANY USERS
   });
  
 app.listen(process.env.PORT || 3000);
