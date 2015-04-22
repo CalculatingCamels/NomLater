@@ -11,7 +11,9 @@ angular.module('nomLater.services', [])
     return $http({
       method: 'GET',
       url: '/api/events',
-      params: {pageNum: pageNum}
+      params: {
+        pageNum: pageNum
+      }
     })
     .then(function(res) {
       return res.data
@@ -19,34 +21,33 @@ angular.module('nomLater.services', [])
 
   };
 
-  var joinEvent = function(event, userToken) {
+  var joinEvent = function(event) {
       return $http({
         method: 'PUT',
         url: '/api/events', 
-        data: {event: event, token: userToken}
+        data: {event: event}
       })
       .then(function (resp) {
-        //probably superfluous, but maybe handy for debugging for now - 04/16/2015 - saf
-        alert("You were added to event ", event.description)
         return resp.statusCode; 
       });
   }  
 
-  var addEvent = function(event, userToken) {
+  var addEvent = function(event) {
       var datetime = new Date(event.date + ' ' + event.time);
       var gmt = datetime.toISOString();
       event.datetime = gmt;
       return $http({
         method: 'POST',
         url: '/api/events',
-        data: {event: event, token: userToken}
+        data: {
+          event: event
+        }
       })
       .then(function (res) {
         return res.data
       });
   }
 
-  // return all of our methods as an object, so we can use them in our controllers
   return {
     getEvents : getEvents,
     joinEvent: joinEvent,
@@ -54,23 +55,7 @@ angular.module('nomLater.services', [])
   }
 
 })
-.factory('Users', function($http){
 
-  var signin = function(resp) {
-    return $http({
-        method: 'POST',
-        url: '/api/signin',
-        data: resp
-      }).then(function (resp) {
-        return resp.data.token;
-      })
-  }
-
-  return {
-    signin: signin,
-  }
-
-})
 /* This custom Angular filter should produce our datetime object in the "from now" format
 popular in other apps */
   .filter('fromNow', function() {
