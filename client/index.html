@@ -11,11 +11,17 @@
   </head>
 
   <body>
-    <ul class="menu" ng-controller="menuBar">
-      <li ng-if="isLoggedIn"><a href="/logout">Sign Out</a></li>
-    </ul>
+    <div class="wrapper">
+      <div class="navigation" ng-if="signedIn">
+        <ul class="menu">
+          <li><a href="/"><img class="brand" src="styles/brand.png"/></a></li> 
+          <li><a href="/logout">Sign Out</a></li>
+          <li><p class="username">Welcome, Charlie!</p></li>
+        </ul>
+      </div>
 
-    <div ng-view></div>
+      <div ng-view></div>
+    </div>
 
     <script src ='/bower_components/angular/angular.js'></script>
     <script src ='/bower_components/angular-route/angular-route.js'></script>

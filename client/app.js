@@ -7,11 +7,11 @@ nomLater.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
       when('/', {
         templateUrl: '/users/signin.html',
-        controller: 'menuBar'
+        controller: 'SignInController'
     }).
       when('/users/:user_id', {
         templateUrl: '/users/profile.html',
-        controller: 'profileCtrl'
+        controller: 'ProfileCtrl'
     }).
       when('/events', {
         templateUrl: '/events/events.html',
