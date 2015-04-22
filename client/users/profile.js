@@ -3,5 +3,5 @@
 angular.module('nomLater', ['ngRoute'])
 
 .controller('ProfileCtrl', function($scope) {
-	// stuff
+	// stuff, more stuff
 });

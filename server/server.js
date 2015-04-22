@@ -49,7 +49,6 @@ passport.serializeUser(function(user, done) {
         });
       } else {
         //User is already in the database, just return their data
-        console.log('ALREADY EXISTING USER DATA', result)
         done(null, result);
       }
     });
@@ -77,26 +76,30 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-app.get('/api/authtest', function(req, res){
+app.get('/api/auth', function(req, res){
   res.status(200).json(req.isAuthenticated());
 })
 
-app.get('/auth/google',
-  passport.authenticate('google', {scope: 
-    ['https://www.googleapis.com/auth/userinfo.profile'] }
-));
+app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile']}));
 
-app.get( '/auth/google/callback', 
-    passport.authenticate('google', { 
-        successRedirect: '/',
-        failureRedirect: '/#/signin'
-}));
+app.get('/auth/google/callback', passport.authenticate('google', {successRedirect: '/#/events', failureRedirect: '/'}));
 
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
- 
+
+/*
+  EXAMPLE EVENT SCHEMA (COPIED FROM OLD CODE):
+  eventID : { type: Number, ref: 'eventID'},
+  description : String,
+  location : String,
+  datetime: Date,
+  creatorID : Number,
+  attendeeIDs : []
+*/
+
+//NONE OF THIS WORKS JUST YET:
 app.route('/api/events')
   .get(function(req, res){
     connectdb(function(db){

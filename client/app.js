@@ -1,17 +1,13 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-var nomLater = angular.module('nomLater', ['ngRoute','nomLater.services','nomLater.events','nomLater.signup']);
+var nomLater = angular.module('nomLater', ['ngRoute','nomLater.services','nomLater.events']);
 
 nomLater.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
       when('/', {
-        templateUrl: '/events/events.html',
-        controller: 'EventsController'
-    }).
-      when('/signin', {
         templateUrl: '/users/signin.html',
-        controller: 'Auth'
+        controller: 'menuBar'
     }).
       when('/users/:user_id', {
         templateUrl: '/users/profile.html',
@@ -22,7 +18,7 @@ nomLater.config(['$routeProvider', function($routeProvider) {
         controller: 'EventsController'
     }).
       when('/events/:event_id', {
-        templateUrl: '/events/event.html'
+        templateUrl: '/events/event.html',
         controller: 'EventsController'
     }).
       otherwise({
@@ -30,3 +26,25 @@ nomLater.config(['$routeProvider', function($routeProvider) {
     });
 }]);
 
+nomLater.controller('menuBar', function($scope, $http, $location, globalAuth){
+  globalAuth.checkAuth().then(function(data){
+    $scope.isLoggedIn = data;
+    if(data && $location.path() === '/'){
+      $location.path('/events')
+    }
+  });
+});
+
+nomLater.factory('globalAuth', function($http){
+  var checkAuth = function(){
+    var test;
+    return $http({
+      method: 'GET',
+      url: '/api/auth'
+    }).then(function(res){
+      return JSON.parse(res.data);
+    });
+  };
+
+  return {checkAuth: checkAuth};
+})
