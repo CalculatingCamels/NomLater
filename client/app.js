@@ -15,11 +15,11 @@ nomLater.config(['$routeProvider', function($routeProvider) {
     }).
       when('/signup', {
         templateUrl: '/users/signup.html',
-        controller: 'SignUpCtrl'
+        controller: 'Auth'
     }).
       when('/signin', {
         templateUrl: '/users/signin.html',
-        controller: 'SignUpCtrl'
+        controller: 'Auth'
     }).otherwise({
         redirectTo: '/'
     });

@@ -2,7 +2,7 @@
 
 angular.module('nomLater.signup', ['ngRoute'])
 
-.controller('SignUpCtrl', function ($scope, $window, $location, Users) {
+.controller('Auth', function ($scope, $window, $location, Users) {
   $scope.user = {};
 
   $scope.signedIn = function() {
