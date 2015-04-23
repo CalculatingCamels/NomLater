@@ -9,6 +9,7 @@ angular.module('nomLater.events', [])
   $scope.invalid = false
   $scope.shown = false
   $scope.user = {};
+  $scope.eventsLoaded = false;
 
   $scope.showForm = function() {
     $scope.shown = !$scope.shown;
@@ -52,10 +53,12 @@ angular.module('nomLater.events', [])
   }
 
   $scope.viewAllEvents = function() {
+    $scope.eventsLoaded = false;
 
     Events.getEvents($scope.pageNumber)
     .then(function(data) {
       $scope.eventsList = data;
+      $scope.eventsLoaded = true;
     });
 
   };
