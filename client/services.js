@@ -1,10 +1,12 @@
 angular.module('nomLater.services', [])
 
-.factory('Events', function($http) {
+.factory('Events', function($http, $rootScope) {
   // these factory functions can be tested in the console with the following syntax (and similar stuff):
   // var e = angular.element(document.body).injector().get('Events'); -> because the name of the factory is 'Events'
   // e.addEvent(newEv)
   // e.getEvents(1)
+
+  var userInfo = {};
   
   // this function finds events with time greater than now (that's what Date.now is)...
   var getEvents = function(pageNum) {
@@ -48,10 +50,28 @@ angular.module('nomLater.services', [])
       });
   }
 
+
+  //I know that this function probably shouldn't
+  //live in the Events scope.... 
+  //but like... whatever man...
+
+  var getUserInfo = function(){
+    console.log("Fired")
+    return $http({
+      method: "GET",
+      url: "/api/userinfo"
+    }).then(function(x){
+      $rootScope.userInfo.name = x.data.displayName;
+      $rootScope.userInfo.id = x.data.googleId;
+    })
+  }
+
   return {
     getEvents : getEvents,
     joinEvent: joinEvent,
-    addEvent : addEvent
+    addEvent : addEvent,
+    getUserInfo : getUserInfo,
+    userInfo : userInfo
   }
 
 })
