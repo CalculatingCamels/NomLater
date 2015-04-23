@@ -115,6 +115,7 @@ app.route('/api/events')
   })
   .delete(function(req, res){
     console.log(req.body);
+    //assume req.body.event_id is the event's ID
   });
  
 app.listen(process.env.PORT || 3000);
