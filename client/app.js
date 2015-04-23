@@ -7,7 +7,12 @@ nomLater.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
       when('/', {
         templateUrl: '/users/signin.html',
-        controller: 'SignInController'
+        authenticate: false
+    }).
+      when('/users/:user_id', {
+        templateUrl: '/users/profile.html',
+        controller: 'profileCtrl',
+        authenticate: true
     }).
       when('/users/:user_id', {
         templateUrl: '/users/profile.html',
@@ -15,23 +20,30 @@ nomLater.config(['$routeProvider', function($routeProvider) {
     }).
       when('/events', {
         templateUrl: '/events/events.html',
-        controller: 'EventsController'
+        controller: 'EventsController',
+        authenticate: true
     }).
       when('/events/:event_id', {
         templateUrl: '/events/event.html',
-        controller: 'EventsController'
+        controller: 'EventsController',
+        authenticate: true
     }).
       otherwise({
         redirectTo: '/'
     });
-}]);
-
-nomLater.controller('menuBar', function($scope, $http, $location, globalAuth){
-  globalAuth.checkAuth().then(function(data){
-    $scope.isLoggedIn = data;
-    if(data && $location.path() === '/'){
-      $location.path('/events')
-    }
+}])
+.run(function($rootScope, $location, globalAuth){
+  $rootScope.$on('$routeChangeStart', function(event, next){
+    $rootScope.path = $location.path();
+    globalAuth.checkAuth().then(function(loggedIn){
+      if(!loggedIn && next.$$route.authenticate){
+        //not logged in and requires auth, redirect to homepage
+        $location.path('/');
+      } else if(loggedIn && $location.path() === '/'){
+        //if loggedin
+        $location.path('events');
+      }
+    });
   });
 });
 
