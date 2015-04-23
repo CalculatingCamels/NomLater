@@ -6,6 +6,11 @@ angular.module('nomLater.events', [])
   $scope.eventsList = {}
   $scope.pageNumber = 0
   $scope.invalid = false
+  $scope.shown = false
+
+  $scope.showForm = function() {
+    $scope.shown = true;
+  }
 
   $scope.joinEvent = function(evt) {
     $scope.event = evt;
