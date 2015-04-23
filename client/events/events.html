@@ -1,18 +1,24 @@
-  <div class='addevent'>
+  <div class="show-add-event">
+    <button class="submit-button" id="add-event-button" ng-click="showForm()">Add an Event</button>
+  </div>
+
+  <div class='addevent' ng-show="shown">
     <form name="eventForm" ng-submit="addEvent()">
       <input type= "text" placeholder="Event Location" ng-model = "newEvent.location">
       <input type= "text" placeholder="Event Description" ng-model = "newEvent.description">
       <input type= "date" ng-model = "newEvent.date">
       <input type= "time" ng-model = "newEvent.time">
-      <button onclick="submit">Submit</button>
+      <button class="submit-button">Submit</button>
       <h1 ng-if="invalid">
         Please fill in all of the fields.
       </h1>
     </form>
   </div>
+
 <div id='container'>
   
- <ul class='events'>
+  <div class="events-header"><h3>Events in Your Network</h3></div>
+  <ul class='events'>
     <li class = 'event' ng-repeat="event in eventsList | orderBy:'datetime'">
       <div class='eventInfo'>
         <div class='creator'>{{event.creator}}</div>
