@@ -41,8 +41,7 @@
 }
 
 .addevent {
-  float: right;
-  display: inline;
+  display: block;
 }
 
 .submit-button {
@@ -64,7 +63,7 @@
 }
 
 .brand:hover {
-  background-color: #efefef;
+  background-color: #d5d5d5;
 }
 
 .signin-banner {
@@ -77,15 +76,24 @@
 }
 
 .google-signin {
-  background-color: #4d90fe;
+  text-align: center;
+  margin: auto;
+  width: 123px;
+  height: 42px;
   border: none;
-  border-radius:2px;
-  color: white;
-  padding: 5px;
+  cursor: pointer;
+  background-image: url("rsz_google_base.png");
+  background-repeat: none;
 }
 
 .google-signin:hover {
-  background-color: 
+  background-image: url("rsz_google_hover.png");
+  background-repeat: none;
+}
+
+.google-signin:active {
+  background-image: url("rsz_google_press.png");
+  background-repeat: none;
 }
 
 .brand-fill {
