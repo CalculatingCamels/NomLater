@@ -1,27 +1,15 @@
 angular.module('nomLater.services', [])
 
 .factory('Events', function($http, $rootScope) {
-  // these factory functions can be tested in the console with the following syntax (and similar stuff):
-  // var e = angular.element(document.body).injector().get('Events'); -> because the name of the factory is 'Events'
-  // e.addEvent(newEv)
-  // e.getEvents(1)
 
-  var userInfo = {};
-  
-  // this function finds events with time greater than now (that's what Date.now is)...
-  var getEvents = function(pageNum) {
+  var getEvents = function() {
     return $http({
       method: 'GET',
-      url: '/api/events',
-      params: {
-        pageNum: pageNum
-      }
-    })
-    .then(function(res) {
+      url: '/api/events'
+    }).then(function(res) {
       console.log(res.data)
       return res.data
     })
-
   };
 
   var joinEvent = function(event) {
@@ -29,11 +17,10 @@ angular.module('nomLater.services', [])
         method: 'PUT',
         url: '/api/events', 
         data: {eventId: event._id, userInfo: $rootScope.userInfo}
-      })
-      .then(function (resp) {
+      }).then(function (resp) {
         return resp.statusCode; 
       });
-  }  
+  };
 
   var addEvent = function(event) {
       var datetime = new Date(event.date + ' ' + event.time);
@@ -44,16 +31,10 @@ angular.module('nomLater.services', [])
         method: 'POST',
         url: '/api/events',
         data: event
-      })
-      .then(function (res) {
+      }).then(function (res) {
         return res.data
       });
-  }
-
-
-  //I know that this function probably shouldn't
-  //live in the Events scope.... 
-  //but like... whatever man...
+  };
 
   var getUserInfo = function(){
     console.log("Fired")
@@ -64,7 +45,7 @@ angular.module('nomLater.services', [])
       $rootScope.userInfo.name = x.data.displayName;
       $rootScope.userInfo.id = x.data.googleId;
     })
-  }
+  };
 
   return {
     getEvents : getEvents,
@@ -72,13 +53,11 @@ angular.module('nomLater.services', [])
     addEvent : addEvent,
     getUserInfo : getUserInfo,
     userInfo : userInfo
-  }
+  };
 
 })
 
-/* This custom Angular filter should produce our datetime object in the "from now" format
-popular in other apps */
-  .filter('fromNow', function() {
+.filter('fromNow', function() {
     return function(dateString) {
       return moment(dateString).fromNow()
     };

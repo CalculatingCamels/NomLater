@@ -1,14 +1,9 @@
 angular.module('nomLater.events', [])
 
 .controller('EventsController', function ($scope, $rootScope, $window, $location, Events, $http) {
-  $rootScope.signedIn = true;
-  $rootScope.user = {}
-  $scope.event = {}
   $scope.eventsList = {}
-  $scope.pageNumber = 0
   $scope.invalid = false
   $scope.shown = false
-  $scope.user = {};
   $scope.eventsLoaded = false;
 
   $scope.showForm = function() {
