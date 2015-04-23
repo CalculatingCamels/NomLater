@@ -2,17 +2,30 @@ angular.module('nomLater.events', [])
 
 .controller('EventsController', function ($scope, $rootScope, $window, $location, Events, CalendarFactory) {
   $rootScope.signedIn = true;
+  $rootScope.user = {}
   $scope.event = {}
   $scope.eventsList = {}
   $scope.pageNumber = 0
   $scope.invalid = false
+  $scope.shown = false
+  $scope.user = {};
+
+  $scope.showForm = function() {
+    $scope.shown = !$scope.shown;
+  }
 
   $scope.joinEvent = function(evt) {
-    $scope.event = evt;
-    Events.joinEvent(evt, userToken);
+    //dont add the user to the event if they are alreay apart of it. 
+    $scope.event = evt; 
+    if(!containsUser($scope.userInfo.name, evt)){
+      Events.joinEvent(evt);
+    } else {
+      alert("You are already going to this event.")
+    }
   }
 
   $scope.addEvent = function() {
+    console.log("AddEvent called")
     if ($scope.newEvent.description !== "" &&
         $scope.newEvent.location !== "" &&
         $scope.newEvent.datetime !== "" ) {
@@ -55,18 +68,44 @@ angular.module('nomLater.events', [])
   };
   
   $scope.prevPage = function() {
-
     if ($scope.pageNumber > 0) {
       $scope.pageNumber--
       $scope.viewAllEvents()
     }
-    
   };
+
 
   $scope.calendar = function(){
     CalendarFactory.startCalendar();
   }
+
+  $scope.initUser = function(){
+    if($rootScope.userInfo === undefined){
+      $rootScope.userInfo = {};
+      //Yeah... i know it doesnt make sense that it
+      // is in events
+      Events.getUserInfo();
+    }
+  }
+
+
+
   
   $scope.viewAllEvents()
   $scope.initNewEventForm()
+  $scope.initUser()
+
+
+   //~~~~~ HELPERS ~~~~~~
+
+   var containsUser = function(name, evnt){
+      for(var i = 0; i < evnt.attendees.length; i++){
+        if(evnt.attendees[i].name === name){
+          return true;
+        }
+      }
+      return false;
+   };
+
+
 })

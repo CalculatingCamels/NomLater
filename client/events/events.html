@@ -1,30 +1,36 @@
-  <div class='addevent'>
+  <div class="show-add-event">
+    <button class="submit-button" id="add-event-button" ng-click="showForm()">Add an Event</button>
+  </div>
+
+  <div class='addevent' ng-show="shown">
     <form name="eventForm" ng-submit="addEvent()">
       <input type= "text" placeholder="Event Location" ng-model = "newEvent.location">
       <input type= "text" placeholder="Event Description" ng-model = "newEvent.description">
       <input type= "date" ng-model = "newEvent.date">
       <input type= "time" ng-model = "newEvent.time">
-      <button onclick="submit">Submit</button>
+      <button class="submit-button">Submit</button>
       <h1 ng-if="invalid">
         Please fill in all of the fields.
       </h1>
-      <button ng-click='calendar()'>calendar test</button>
       <div id="authorize-div"></div>
     </form>
   </div>
+
 <div id='container'>
- <ul class='events'>
+    <button ng-click='calendar()'>calendar test</button>
+  <div class="events-header"><h3>Events in Your Network</h3></div>
+  <ul class='events'>
     <li class = 'event' ng-repeat="event in eventsList | orderBy:'datetime'">
       <div class='eventInfo'>
-        <div class='creator'>{{event.creator}}</div>
+        <div class='creator'>{{event.attendees[0].name}}</div>
         <div class='description'>{{event.description}}</div>
         <div class='location'>{{event.location}}</div>
         <div class='time'>{{event.datetime | date : 'MM/dd/yyyy @ h:mma' }}</div>        
         <div class='attendee-list'>
           Who's Going?:
-          <div class='attendee' ng-repeat="attendee in event.attendeeIDs">{{attendee.username}}</div>
+          <div class='attendee' ng-repeat="attendee in event.attendees"><a href="">{{attendee.name}}</a></div>
         </div>
-        <button ng-click='joinEvent(event)'>Join this event!</button>
+        <button class="submit-button" ng-click='joinEvent(event)'>Join this event!</button>
       </div>
     </li>
   </ul>

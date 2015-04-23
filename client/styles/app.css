@@ -1,8 +1,14 @@
 /* app css stylesheet */
+* {
+  font-family: Courier;
+}
+.full-wrapper {
+  margin: 0 auto;
+  width: 70%;
+}
 
 .wrapper {
   margin: 0 auto;
-  width: 70%;
 }
 
 .menu {
@@ -12,16 +18,28 @@
   padding: 5px;
 }
 
+.username {
+  border-bottom: 3px solid #d34836;
+}
+
 .menu > li {
   text-decoration: none;
   display: inline;
-  font-family: Courier;
 }
 
 .menu > li > p {
   margin: 20px;
   display: inline;
   float: right;
+}
+
+.menu > li > a {
+  text-decoration: none;
+  color: black;
+}
+
+.menu > li > a:hover {
+  border-bottom: 3px solid #d34836;
 } 
 
 .menu > li:before {
@@ -34,21 +52,24 @@
   padding: 0;
 }
 
-.addevent {
-  font-family: Courier;
-  float: right;
+.show-add-event {
+  text-align: center;
+  margin: 10px;
 }
 
-.addevent > form > button {
+.addevent {
+  display: block;
+}
+
+.submit-button {
   background: #d5d5d5;
   border-radius: 2px;
   border: none;
-  font-family: Courier New;
   color: black;
   text-decoration: none;
 }
 
-.addevent > form > button:hover {
+.submit-button:hover {
   background: #a5a5a5;
   text-decoration: none;
 }
@@ -59,11 +80,7 @@
 }
 
 .brand:hover {
-  background-color: #efefef;
-}
-
-#signin {
-  font-family: Courier;
+  background-color: #d5d5d5;
 }
 
 .signin-banner {
@@ -76,15 +93,24 @@
 }
 
 .google-signin {
-  background-color: #4d90fe;
+  text-align: center;
+  margin: auto;
+  width: 123px;
+  height: 42px;
   border: none;
-  border-radius:2px;
-  color: white;
-  padding: 5px;
+  cursor: pointer;
+  background-image: url("rsz_google_base.png");
+  background-repeat: none;
 }
 
 .google-signin:hover {
-  background-color: 
+  background-image: url("rsz_google_hover.png");
+  background-repeat: none;
+}
+
+.google-signin:active {
+  background-image: url("rsz_google_press.png");
+  background-repeat: none;
 }
 
 .brand-fill {
@@ -99,7 +125,6 @@
 }
 
 .footer {
-  font: Courier;
   text-align: center;
   font-size: 0.7em;
   position:absolute;
@@ -110,4 +135,27 @@
   margin:0;
 }
 
+.event {
+  padding: 5px;
+  list-style-type: none;
+}
+
+.eventinfo .creator {
+ 
+}
+
+.attendee {
+  margin: 5px;
+}
+
+.attendee a {
+  text-decoration: none;
+  color: black;
+}
+
+.attendee a:hover {
+  color: black;
+  text-decoration: none;
+  border-bottom: 3px solid #d34836;
+}
 

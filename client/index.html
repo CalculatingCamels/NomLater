@@ -7,16 +7,17 @@
     <link rel="icon" href="/styles/brand.png">
     <link rel="stylesheet" href="/styles/app.css">
     <link rel="stylesheet" href="/bower_components/bootstrap-css/css/bootstrap.min.css">
-
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    
   </head>
 
   <body>
-    <div class="wrapper">
+    <div class="full-wrapper">
       <div class="navigation" ng-if="path !== '/'">
         <ul class="menu">
           <li><a href="/#/events"><img class="brand" src="styles/brand.png"/></a></li> 
           <li ><a href="/logout">Sign Out</a></li>
-          <li><p class="username">Welcome, Charlie!</p></li>
+          <li><p class="username">Welcome, {{userInfo.name}}!</p></li>
         </ul>
       </div>
       <div ng-view></div>

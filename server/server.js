@@ -22,14 +22,14 @@ app.use(session({
   secret: 'nomlater',
   saveUninitialized: true,
   resave: true,
-  store: new MongoStore({url: 'mongodb://localhost:27017/nomlater'})
+  store: new MongoStore({url: 'mongodb://boss:boss@ds035290.mongolab.com:35290/nomlater'})
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 var connectdb = function(cb){
-  mongo.connect('mongodb://localhost:27017/nomlater', function(err, db){
+  mongo.connect('mongodb://boss:boss@ds035290.mongolab.com:35290/nomlater', function(err, db){
     if(err) return console.log(err);
     console.log('connected to the db successfully');
     cb(db);
@@ -37,7 +37,6 @@ var connectdb = function(cb){
 };
 
 passport.serializeUser(function(user, done) {
-  console.log('serialize user object', user);
   connectdb(function(db){
     db.collection('users').find({googleId: user.id}).toArray(function (err, result) {
       if(result.length === 0){
@@ -56,7 +55,6 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(obj, done) {
-  console.log('deserialize user object', obj);
   connectdb(function(db){
     db.collection('users').find({googleId: obj.id}).toArray(function (err, result) {
       done(null, obj);
@@ -71,13 +69,16 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    console.log(profile);
     return done(null, profile);
   }
 ));
 
 app.get('/api/auth', function(req, res){
   res.status(200).json(req.isAuthenticated());
+})
+
+app.get('/api/userinfo', function(req, res){
+  res.status(200).json(req.session.passport.user[0]);
 })
 
 app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile']}));
@@ -89,39 +90,32 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-/*
-  EXAMPLE EVENT SCHEMA (COPIED FROM OLD CODE):
-  eventID : { type: Number, ref: 'eventID'},
-  description : String,
-  location : String,
-  datetime: Date,
-  creatorID : Number,
-  attendeeIDs : []
-*/
-
-//NONE OF THIS WORKS JUST YET:
 app.route('/api/events')
   .get(function(req, res){
     connectdb(function(db){
-      db.collection('events').find({'datetime': {$gt:(new Date()).toISOString()}}).sort({'datetime' : 1}).toArray(function(err, docs){
+      var time = new Date().getTime()
+      db.collection('events').find({datetime: {$gt: time}}).toArray(function(err, docs){
         db.close();
         res.status(200).send(JSON.stringify(docs));
       })
     })
   })
   .post(function(req, res){
+    req.body['attendees'] = [{id: req.session.passport.user[0].googleId, name: req.session.passport.user[0].displayName}];
+    req.body['creator_id']= req.session.passport.user[0].googleId;
     connectdb(function(db){
-      db.collection('events').insert([], function(err, result){
+      db.collection('events').insert([req.body], function(err, result){
         db.close();
-        res.status(200).send(JSON.stringify(docs));
+        res.status(200).json({'success':true});
       })
     })
   })
   .put(function(req, res){
-    //add a User's ID to the EVENT row
-    //EVENTS HAVE MANY USERS
+    console.log(req.body);
+  })
+  .delete(function(req, res){
+    console.log(req.body);
   });
  
 app.listen(process.env.PORT || 3000);
- 
 console.log('server listening on ' + (process.env.PORT || 3000));
