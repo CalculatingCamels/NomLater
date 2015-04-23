@@ -1,6 +1,6 @@
 angular.module('nomLater.events', [])
 
-.controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory) {
+.controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory, $timeout) {
   $scope.eventsList = {}
   $scope.invalid = false
   $scope.shown = false

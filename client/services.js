@@ -58,8 +58,6 @@ angular.module('nomLater.services', [])
   /*----------------------THESE VARIABLES ARE HERE TEMPORARILY-------------------------------*/
   var CLIENT_ID = '211335492612-618pduc3omcj4rptt73svjba064gco3o.apps.googleusercontent.com';
 
-  var API_KEY = 'AIzaSyBs7UEnvDdAc93S8NnhPW_p9376NeLuZ9M'
-
   var SCOPES = ['https://www.googleapis.com/auth/calendar'];
 
   /*----------------------------------------------------------------------------------------*/

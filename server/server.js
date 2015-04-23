@@ -81,7 +81,7 @@ app.get('/api/userinfo', function(req, res){
   res.status(200).json(req.session.passport.user[0]);
 })
 
-app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile']}));
+app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/calendar']}));
 
 app.get('/auth/google/callback', passport.authenticate('google', {successRedirect: '/#/events', failureRedirect: '/'}));
 
