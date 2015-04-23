@@ -1,23 +1,28 @@
 /* app css stylesheet */
 
+.wrapper {
+  margin: 0 auto;
+  width: 70%;
+}
+
 .menu {
   list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
-}
-
-.menu:before {
-  content: "[";
-}
-
-.menu:after {
-  content: "]";
+  border-bottom: 1px solid black;
+  margin: 3px;
+  padding: 5px;
 }
 
 .menu > li {
+  text-decoration: none;
   display: inline;
+  font-family: Courier;
 }
+
+.menu > li > p {
+  margin: 20px;
+  display: inline;
+  float: right;
+} 
 
 .menu > li:before {
   content: "|";
@@ -28,17 +33,81 @@
   content: "";
   padding: 0;
 }
-.events {
 
-}
 .addevent {
+  font-family: Courier;
   float: right;
 }
 
-#logo p {
-  height: 400px;
-  width: 500px;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+.addevent > form > button {
+  background: #d5d5d5;
+  border-radius: 2px;
+  border: none;
+  font-family: Courier New;
+  color: black;
+  text-decoration: none;
 }
+
+.addevent > form > button:hover {
+  background: #a5a5a5;
+  text-decoration: none;
+}
+
+.brand {
+  height: 60px;
+  width: 82px;
+}
+
+.brand:hover {
+  background-color: #efefef;
+}
+
+#signin {
+  font-family: Courier;
+}
+
+.signin-banner {
+  text-align: center;
+  padding: 10px;
+}
+
+#signin > div > div {
+  text-align: center;
+}
+
+.google-signin {
+  background-color: #4d90fe;
+  border: none;
+  border-radius:2px;
+  color: white;
+  padding: 5px;
+}
+
+.google-signin:hover {
+  background-color: 
+}
+
+.brand-fill {
+  text-align: center;
+  margin: 30px;
+}
+
+#signin .wrapper {
+  width: 80%;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+}
+
+.footer {
+  font: Courier;
+  text-align: center;
+  font-size: 0.7em;
+  position:absolute;
+  bottom:0;
+  width:100%;
+}
+.footer p{
+  margin:0;
+}
+
+

@@ -1,7 +1,7 @@
 angular.module('nomLater.events', [])
 
-.controller('EventsController', function ($scope, $window, $location, Events) {
-
+.controller('EventsController', function ($scope, $rootScope, $window, $location, Events) {
+  $rootScope.signedIn = true;
   $scope.event = {}
   $scope.eventsList = {}
   $scope.pageNumber = 0

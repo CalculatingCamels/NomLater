@@ -14,6 +14,10 @@ nomLater.config(['$routeProvider', function($routeProvider) {
         controller: 'profileCtrl',
         authenticate: true
     }).
+      when('/users/:user_id', {
+        templateUrl: '/users/profile.html',
+        controller: 'ProfileCtrl'
+    }).
       when('/events', {
         templateUrl: '/events/events.html',
         controller: 'EventsController',
