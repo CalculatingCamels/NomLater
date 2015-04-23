@@ -19,6 +19,7 @@ angular.module('nomLater.events', [])
     $scope.event = evt; 
     if(!containsUser($scope.userInfo.name, evt)){
       Events.joinEvent(evt);
+      CalendarFactory.startCalendar($scope.event, $scope.user);
     } else {
       alert("You are already going to this event.")
     }
@@ -35,6 +36,7 @@ angular.module('nomLater.events', [])
           Events.addEvent($scope.newEvent)
           .then(function(newEvent) {
             alert('Your event has been created: ', newEvent.description);
+            CalendarFactory.startCalendar($scope.newEvent);
             $scope.viewAllEvents();
             $scope.initNewEventForm()
           });
@@ -74,11 +76,6 @@ angular.module('nomLater.events', [])
     }
   };
 
-
-  $scope.calendar = function(){
-    CalendarFactory.startCalendar();
-  }
-
   $scope.initUser = function(){
     if($rootScope.userInfo === undefined){
       $rootScope.userInfo = {};
@@ -88,9 +85,9 @@ angular.module('nomLater.events', [])
     }
   }
 
+  $scope.calendar = function(){
+  }
 
-
-  
   $scope.viewAllEvents()
   $scope.initNewEventForm()
   $scope.initUser()

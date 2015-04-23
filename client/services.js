@@ -56,7 +56,6 @@ angular.module('nomLater.services', [])
   //but like... whatever man...
 
   var getUserInfo = function(){
-    console.log("Fired")
     return $http({
       method: "GET",
       url: "/api/userinfo"
@@ -77,7 +76,6 @@ angular.module('nomLater.services', [])
 })
 .factory('CalendarFactory', function(){
   /*----------------------THESE VARIABLES ARE HERE TEMPORARILY-------------------------------*/
-
   var CLIENT_ID = '211335492612-618pduc3omcj4rptt73svjba064gco3o.apps.googleusercontent.com';
 
   var API_KEY = 'AIzaSyBs7UEnvDdAc93S8NnhPW_p9376NeLuZ9M'
@@ -89,11 +87,26 @@ angular.module('nomLater.services', [])
 
   /*----------------------------------------------------------------------------------------*/
 
-  var twoHoursLater = new Date(now.getTime() + (2*1000*60*60));
-  twoHoursLater = twoHoursLater.toISOString();
 
-  var checkAuth = function(){
-    console.log("Check Auth");
+  var resource = {}
+  var init = function(event, user){    
+  console.log("Event", event);
+  var eventTime = new Date(event.datetime);
+  date = eventTime.toISOString()
+  var twoHoursLater = new Date(eventTime.getTime() + (2*1000*60*60));
+  twoHoursLater = twoHoursLater.toISOString();
+  console.log("date: ", date);
+  console.log("today: ", today);
+  // setup event details
+    resource = {
+      "summary": event.description,
+      "start": {
+        "dateTime": date //THIS HAS TO BE CHANGED TO EVENT TIME;
+      },
+      "end": {
+        "dateTime": twoHoursLater //THIS HAS TO BE CHANGED TO ONE HOUR LATER;
+      }
+    };
     gapi.auth.authorize({
       'client_id': CLIENT_ID,
       'scope': SCOPES,
@@ -102,7 +115,6 @@ angular.module('nomLater.services', [])
   }
 
   var handleAuthResult = function(authResult) {
-    console.log("handle Auth result", authResult);
     var authorizeDiv = document.getElementById('authorize-div');
     if (authResult && !authResult.error) {
       // Hide auth UI, then load Calendar client library.
@@ -116,38 +128,23 @@ angular.module('nomLater.services', [])
   }
 
   function handleAuthClick(event) {
-    console.log("handle auth click");
     gapi.auth.authorize(
       {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
       handleAuthResult);
     return false;
   }
 
-  // setup event details
-  var resource = {
-    "summary": "Sample Event " + Math.floor((Math.random() * 10) + 1),
-    "start": {
-      "dateTime": today //THIS HAS TO BE CHANGED 
-    },
-    "end": {
-      "dateTime": twoHoursLater //THIS HAS TO BE CHANGED 
-    }
-  };
 
   var loadCalendarApi = function() {
-    console.log("load calendar api");
     gapi.client.load('calendar', 'v3', function(){
       var request = gapi.client.calendar.events.insert({
-        "calendarId": "christian.brandalise@gmail.com", //THIS HAS TO BE CHANGED 
+        "calendarId": "primary", 
         "resource": resource
       })
 
       request.execute(function(resp){
-        console.log("resp", resp);
         if(resp.status === 'confirmed'){
           console.log("event posted to my calendar");
-                        document.getElementById('event-response').innerHTML = "Event created successfully. View it <a href='" + resp.htmlLink + "'>online here</a>.";
-
         } else {
           console.log("there was a problem listing the event");
         }
@@ -157,7 +154,7 @@ angular.module('nomLater.services', [])
   }
 
   return {
-    startCalendar: checkAuth
+    startCalendar: init
   }
 })
 
