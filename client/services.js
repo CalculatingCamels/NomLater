@@ -51,8 +51,7 @@ angular.module('nomLater.services', [])
     getEvents : getEvents,
     joinEvent: joinEvent,
     addEvent : addEvent,
-    getUserInfo : getUserInfo,
-    userInfo : userInfo
+    getUserInfo : getUserInfo
   };
 
 })
