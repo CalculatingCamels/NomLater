@@ -25,7 +25,8 @@
         <div class='description'>{{event.description}}</div>
         <div class='location'>{{event.location}}</div>
         <div class='time'>{{event.datetime | date : 'MM/dd/yyyy @ h:mma' }}</div>        
-        <div class='attendee-list'>
+        <div class='reservation' ng-if="event.reserve"><a href="{{event.reserve}}">Make a Reservation</a></div>     
+
           Who's Going?:
           <div class='attendee' ng-repeat="attendee in event.attendees"><a href="">{{attendee.name}}</a></div>
         </div>
