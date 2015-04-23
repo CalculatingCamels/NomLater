@@ -11,8 +11,8 @@
   </head>
 
   <body>
-    <ul class="menu" ng-controller="menuBar">
-      <li ng-if="isLoggedIn"><a href="/logout">Sign Out</a></li>
+    <ul class="menu">
+      <li ng-if="path !== '/'"><a href="/logout">Sign Out</a></li>
     </ul>
 
     <div ng-view></div>
