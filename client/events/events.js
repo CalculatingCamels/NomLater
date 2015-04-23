@@ -1,14 +1,10 @@
 angular.module('nomLater.events', [])
 
-.controller('EventsController', function ($scope, $rootScope, $window, $location, Events, CalendarFactory) {
-  $rootScope.signedIn = true;
-  $rootScope.user = {}
-  $scope.event = {}
+.controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory) {
   $scope.eventsList = {}
-  $scope.pageNumber = 0
   $scope.invalid = false
   $scope.shown = false
-  $scope.user = {};
+  $scope.eventsLoaded = false;
 
   $scope.showForm = function() {
     $scope.shown = !$scope.shown;
@@ -16,10 +12,9 @@ angular.module('nomLater.events', [])
 
   $scope.joinEvent = function(evt) {
     //dont add the user to the event if they are alreay apart of it. 
-    $scope.event = evt; 
     if(!containsUser($scope.userInfo.name, evt)){
       Events.joinEvent(evt);
-      CalendarFactory.startCalendar($scope.event, $scope.user);
+      CalendarFactory.startCalendar(evt);
     } else {
       alert("You are already going to this event.")
     }
@@ -33,13 +28,22 @@ angular.module('nomLater.events', [])
 
           $scope.invalid = false
 
-          Events.addEvent($scope.newEvent)
+
+          var loc = $scope.newEvent.location;
+          $scope.invalid = false
+
+          openTable(loc, function(url){
+            $scope.newEvent.reserve = url;
+          }).then(function(x){
+            return Events.addEvent($scope.newEvent)
+          })
           .then(function(newEvent) {
             alert('Your event has been created: ', newEvent.description);
             CalendarFactory.startCalendar($scope.newEvent);
             $scope.viewAllEvents();
             $scope.initNewEventForm()
           });
+
     } else {
       $scope.invalid = true
     }     
@@ -54,10 +58,12 @@ angular.module('nomLater.events', [])
   }
 
   $scope.viewAllEvents = function() {
+    $scope.eventsLoaded = false;
 
     Events.getEvents($scope.pageNumber)
     .then(function(data) {
       $scope.eventsList = data;
+      $scope.eventsLoaded = true;
     });
 
   };
@@ -77,15 +83,21 @@ angular.module('nomLater.events', [])
   };
 
   $scope.initUser = function(){
-    if($rootScope.userInfo === undefined){
+    if(!$rootScope.userInfo){
       $rootScope.userInfo = {};
-      //Yeah... i know it doesnt make sense that it
-      // is in events
       Events.getUserInfo();
     }
   }
 
-  $scope.calendar = function(){
+  function openTable(name, cb){
+    return $http({
+      method: "GET",
+      url: "https://opentable.herokuapp.com/api/restaurants?city=Austin&name=" + name
+    }).then(function(r){ 
+      if(r.data.total_entries === 1) {
+       cb(r.data.restaurants[0].mobile_reserve_url);
+      }   
+    })
   }
 
   $scope.viewAllEvents()
