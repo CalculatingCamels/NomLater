@@ -1,6 +1,6 @@
 angular.module('nomLater.events', [])
 
-.controller('EventsController', function ($scope, $rootScope, $window, $location, Events, $http) {
+.controller('EventsController', function ($scope, $rootScope, $window, $location, Events) {
   $rootScope.signedIn = true;
   $rootScope.user = {}
   $scope.event = {}
@@ -9,7 +9,6 @@ angular.module('nomLater.events', [])
   $scope.invalid = false
   $scope.shown = false
   $scope.user = {};
-  $scope.eventsLoaded = false;
 
   $scope.showForm = function() {
     $scope.shown = !$scope.shown;
@@ -33,21 +32,12 @@ angular.module('nomLater.events', [])
 
           $scope.invalid = false
 
-
-          var loc = $scope.newEvent.location;
-          $scope.invalid = false
-
-          openTable(loc, function(url){
-            $scope.newEvent.reserve = url;
-          }).then(function(x){
-            return Events.addEvent($scope.newEvent)
-          })
+          Events.addEvent($scope.newEvent)
           .then(function(newEvent) {
             alert('Your event has been created: ', newEvent.description);
             $scope.viewAllEvents();
             $scope.initNewEventForm()
           });
-
     } else {
       $scope.invalid = true
     }     
@@ -62,12 +52,10 @@ angular.module('nomLater.events', [])
   }
 
   $scope.viewAllEvents = function() {
-    $scope.eventsLoaded = false;
 
     Events.getEvents($scope.pageNumber)
     .then(function(data) {
       $scope.eventsList = data;
-      $scope.eventsLoaded = true;
     });
 
   };
@@ -95,16 +83,6 @@ angular.module('nomLater.events', [])
     }
   }
 
-  function openTable(name, cb){
-    return $http({
-      method: "GET",
-      url: "https://opentable.herokuapp.com/api/restaurants?city=Austin&name=" + name
-    }).then(function(r){ 
-      if(r.data.total_entries === 1) {
-       cb(r.data.restaurants[0].mobile_reserve_url);
-      }   
-    })
-  }
 
 
   
