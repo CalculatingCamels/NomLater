@@ -9,7 +9,7 @@ angular.module('nomLater.events', [])
   $scope.shown = false
 
   $scope.showForm = function() {
-    $scope.shown = true;
+    $scope.shown = !$scope.shown;
   }
 
   $scope.joinEvent = function(evt) {

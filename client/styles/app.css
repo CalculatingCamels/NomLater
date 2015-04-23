@@ -1,5 +1,7 @@
 /* app css stylesheet */
-
+* {
+  font-family: Courier;
+}
 .wrapper {
   margin: 0 auto;
   width: 70%;
@@ -15,7 +17,6 @@
 .menu > li {
   text-decoration: none;
   display: inline;
-  font-family: Courier;
 }
 
 .menu > li > p {
@@ -40,15 +41,14 @@
 }
 
 .addevent {
-  font-family: Courier;
   float: right;
+  display: inline;
 }
 
 .submit-button {
   background: #d5d5d5;
   border-radius: 2px;
   border: none;
-  font-family: Courier New;
   color: black;
   text-decoration: none;
 }
@@ -65,10 +65,6 @@
 
 .brand:hover {
   background-color: #efefef;
-}
-
-#signin {
-  font-family: Courier;
 }
 
 .signin-banner {
@@ -104,7 +100,6 @@
 }
 
 .footer {
-  font: Courier;
   text-align: center;
   font-size: 0.7em;
   position:absolute;
