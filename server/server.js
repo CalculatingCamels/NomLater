@@ -22,14 +22,14 @@ app.use(session({
   secret: 'nomlater',
   saveUninitialized: true,
   resave: true,
-  store: new MongoStore({url: 'mongodb://localhost:27017/nomlater'})
+  store: new MongoStore({url: 'mongodb://boss:boss@ds035290.mongolab.com:35290/nomlater'})
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 var connectdb = function(cb){
-  mongo.connect('mongodb://localhost:27017/nomlater', function(err, db){
+  mongo.connect('mongodb://boss:boss@ds035290.mongolab.com:35290/nomlater', function(err, db){
     if(err) return console.log(err);
     console.log('connected to the db successfully');
     cb(db);
@@ -69,7 +69,6 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    console.log(profile);
     return done(null, profile);
   }
 ));
@@ -91,24 +90,10 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-
-/*
-  EXAMPLE EVENT SCHEMA (COPIED FROM OLD CODE):
-  eventID : { type: Number, ref: 'eventID'},
-  description : String,
-  location : String,
-  datetime: Date,
-  creatorID : Number,
-  attendeeIDs : [],
-  reserve : url
-*/
-
-//NONE OF THIS WORKS JUST YET:
 app.route('/api/events')
   .get(function(req, res){
     connectdb(function(db){
       var time = new Date().getTime()
-      console.log(time)
       db.collection('events').find({datetime: {$gt: time}}).toArray(function(err, docs){
         db.close();
         res.status(200).send(JSON.stringify(docs));
@@ -118,7 +103,6 @@ app.route('/api/events')
   .post(function(req, res){
     req.body['attendees'] = [{id: req.session.passport.user[0].googleId, name: req.session.passport.user[0].displayName}];
     req.body['creator_id']= req.session.passport.user[0].googleId;
-    console.log(req.body);
     connectdb(function(db){
       db.collection('events').insert([req.body], function(err, result){
         db.close();
@@ -127,6 +111,9 @@ app.route('/api/events')
     })
   })
   .put(function(req, res){
+    console.log(req.body);
+  })
+  .delete(function(req, res){
     console.log(req.body);
   });
  

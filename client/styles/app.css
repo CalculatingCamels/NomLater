@@ -2,9 +2,13 @@
 * {
   font-family: Courier;
 }
-.wrapper {
+.full-wrapper {
   margin: 0 auto;
   width: 70%;
+}
+
+.wrapper {
+  margin: 0 auto;
 }
 
 .menu {
@@ -12,6 +16,10 @@
   border-bottom: 1px solid black;
   margin: 3px;
   padding: 5px;
+}
+
+.username {
+  border-bottom: 3px solid #d34836;
 }
 
 .menu > li {
@@ -23,6 +31,15 @@
   margin: 20px;
   display: inline;
   float: right;
+}
+
+.menu > li > a {
+  text-decoration: none;
+  color: black;
+}
+
+.menu > li > a:hover {
+  border-bottom: 3px solid #d34836;
 } 
 
 .menu > li:before {
@@ -117,4 +134,26 @@
 .footer p{
   margin:0;
 }
+.event {
+  padding: 5px;
+  list-style-type: none;
+}
 
+.eventinfo .creator {
+ 
+}
+
+.attendee {
+  margin: 5px;
+}
+
+.attendee a {
+  text-decoration: none;
+  color: black;
+}
+
+.attendee a:hover {
+  color: black;
+  text-decoration: none;
+  border-bottom: 3px solid #d34836;
+}

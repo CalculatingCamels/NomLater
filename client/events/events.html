@@ -21,15 +21,15 @@
   <ul class='events'>
     <li class = 'event' ng-repeat="event in eventsList | orderBy:'datetime'">
       <div class='eventInfo'>
-        <div class='creator'>{{event.creator}}</div>
+        <div class='creator'>{{event.attendees[0].name}}</div>
         <div class='description'>{{event.description}}</div>
         <div class='location'>{{event.location}}</div>
         <div class='time'>{{event.datetime | date : 'MM/dd/yyyy @ h:mma' }}</div>        
         <div class='attendee-list'>
           Who's Going?:
-          <div class='attendee' ng-repeat="attendee in event.attendees">{{attendee.name}}</div>
+          <div class='attendee' ng-repeat="attendee in event.attendees"><a href="">{{attendee.name}}</a></div>
         </div>
-        <button ng-click='joinEvent(event)'>Join this event!</button>
+        <button class="submit-button" ng-click='joinEvent(event)'>Join this event!</button>
       </div>
     </li>
   </ul>
