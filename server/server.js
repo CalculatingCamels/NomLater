@@ -107,22 +107,25 @@ app.route('/api/events')
       db.collection('events').insert([req.body], function(err, result){
         db.close();
         res.status(200).json({'success':true});
-      })
-    })
+      });
+    });
   })
   .put(function(req, res){
     connectdb(function(db){
-      db.collection('events').update({ _id : req.body.eventId }, {$addToSet : {attendees: [req.body.userInfo]}}, function(err, result){
-        console.log(err, result);
+      db.collection('events').update({"_id": ObjectID(req.body.eventId)}, {$push: {attendees: req.body.userInfo}}, function(err, result){
         db.close();
         res.status(200).json({'success':true});
-      })
-    })
-
+      });
+    });
   })
   .delete(function(req, res){
-    console.log(req.body);
-    //assume req.body.event_id is the event's ID
+    //Pass "eventId" into this request.
+    connectdb(function(db){
+      db.collection('events').remove({"_id": ObjectID(req.body.eventId)}, function(err, result){
+        db.close();
+        res.status(200).json({'success':result.rows.length === 1});
+      });
+    });
   });
  
 app.listen(process.env.PORT || 3000);
