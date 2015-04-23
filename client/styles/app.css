@@ -93,6 +93,10 @@
   padding: 10px;
 }
 
+#signin {
+  margin: 10% auto 0 auto;
+}
+
 #signin > div > div {
   text-align: center;
 }
