@@ -8,10 +8,11 @@
       <h1 ng-if="invalid">
         Please fill in all of the fields.
       </h1>
+      <button ng-click='calendar()'>calendar test</button>
+      <div id="authorize-div"></div>
     </form>
   </div>
 <div id='container'>
-  
  <ul class='events'>
     <li class = 'event' ng-repeat="event in eventsList | orderBy:'datetime'">
       <div class='eventInfo'>
