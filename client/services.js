@@ -16,6 +16,7 @@ angular.module('nomLater.services', [])
       }
     })
     .then(function(res) {
+      console.log(res.data)
       return res.data
     })
 
@@ -34,8 +35,9 @@ angular.module('nomLater.services', [])
 
   var addEvent = function(event) {
       var datetime = new Date(event.date + ' ' + event.time);
-      var gmt = datetime.toISOString();
-      event.datetime = gmt;
+      var unix = datetime.getTime();
+      event.datetime = unix;
+      event.createdAt = new Date().getTime();
       return $http({
         method: 'POST',
         url: '/api/events',

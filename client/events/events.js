@@ -13,6 +13,7 @@ angular.module('nomLater.events', [])
   }
 
   $scope.addEvent = function() {
+    console.log("AddEvent called")
     if ($scope.newEvent.description !== "" &&
         $scope.newEvent.location !== "" &&
         $scope.newEvent.datetime !== "" ) {

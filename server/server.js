@@ -37,7 +37,6 @@ var connectdb = function(cb){
 };
 
 passport.serializeUser(function(user, done) {
-  console.log('serialize user object', user);
   connectdb(function(db){
     db.collection('users').find({googleId: user.id}).toArray(function (err, result) {
       if(result.length === 0){
@@ -56,7 +55,6 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(obj, done) {
-  console.log('deserialize user object', obj);
   connectdb(function(db){
     db.collection('users').find({googleId: obj.id}).toArray(function (err, result) {
       done(null, obj);
@@ -96,24 +94,28 @@ app.get('/logout', function(req, res){
   location : String,
   datetime: Date,
   creatorID : Number,
-  attendeeIDs : []
+  attendeeIDs : [],
+  reserve : url
 */
 
 //NONE OF THIS WORKS JUST YET:
 app.route('/api/events')
   .get(function(req, res){
     connectdb(function(db){
-      db.collection('events').find({'datetime': {$gt:(new Date()).toISOString()}}).sort({'datetime' : 1}).toArray(function(err, docs){
+      db.collection('events').find({datetime : { $gt: new Date().getTime()}}).toArray(function(err, docs){
         db.close();
         res.status(200).send(JSON.stringify(docs));
       })
     })
   })
   .post(function(req, res){
+    req.body['attendees'] = [];
+    req.body['creator_id']= req.session.passport.user[0].googleId;
+    console.log(req.body);
     connectdb(function(db){
-      db.collection('events').insert([], function(err, result){
+      db.collection('events').insert([req.body], function(err, result){
         db.close();
-        res.status(200).send(JSON.stringify(docs));
+        res.status(200).json({'success':true});
       })
     })
   })
