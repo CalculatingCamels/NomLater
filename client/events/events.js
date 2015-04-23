@@ -13,8 +13,10 @@ angular.module('nomLater.events', [])
   }
 
   $scope.joinEvent = function(evt) {
+    //dont add the user to the event if they are alreay apart of it. 
+
     $scope.event = evt;
-    Events.joinEvent(evt, userToken);
+    Events.joinEvent(evt);
   }
 
   $scope.addEvent = function() {

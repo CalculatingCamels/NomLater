@@ -26,7 +26,7 @@ angular.module('nomLater.services', [])
       return $http({
         method: 'PUT',
         url: '/api/events', 
-        data: {event: event}
+        data: event
       })
       .then(function (resp) {
         return resp.statusCode; 
@@ -41,9 +41,7 @@ angular.module('nomLater.services', [])
       return $http({
         method: 'POST',
         url: '/api/events',
-        data: {
-          event: event
-        }
+        data: event
       })
       .then(function (res) {
         return res.data
