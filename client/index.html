@@ -12,14 +12,13 @@
 
   <body>
     <div class="wrapper">
-      <div class="navigation" ng-if="signedIn">
+      <div class="navigation" ng-if="path !== '/'">
         <ul class="menu">
           <li><a href="/#/events"><img class="brand" src="styles/brand.png"/></a></li> 
-          <li><a href="/logout">Sign Out</a></li>
+          <li ><a href="/logout">Sign Out</a></li>
           <li><p class="username">Welcome, Charlie!</p></li>
         </ul>
       </div>
-
       <div ng-view></div>
     </div>
 
