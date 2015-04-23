@@ -111,7 +111,14 @@ app.route('/api/events')
     })
   })
   .put(function(req, res){
-    console.log(req.body);
+    connectdb(function(db){
+      db.collection('events').update({ _id : req.body.eventId }, {$addToSet : {attendees: req.body.userInfo}},function(err, result){
+        console.log(err, result);
+        db.close();
+        res.status(200).json({'success':true});
+      })
+    })
+
   })
   .delete(function(req, res){
     console.log(req.body);
