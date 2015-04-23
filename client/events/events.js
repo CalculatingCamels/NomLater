@@ -12,7 +12,6 @@ angular.module('nomLater.events', [])
 
   $scope.joinEvent = function(evt) {
     //dont add the user to the event if they are alreay apart of it. 
-    $scope.event = evt; 
     if(!containsUser($scope.userInfo.name, evt)){
       Events.joinEvent(evt);
     } else {
