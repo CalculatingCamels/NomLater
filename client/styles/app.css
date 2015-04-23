@@ -146,14 +146,13 @@
   overflow-y: scroll;
   /*border-left: 3px solid black;
   border-right: 3px solid black;*/
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
 }
 
 .event {
+  padding: 5px;
+  list-style-type: none;
   margin: 0;
-  padding: 10px;
+  padding: 0;
 }
 
 .creator {
@@ -224,3 +223,4 @@
     -webkit-transform: rotate(-360deg);
   }
 }
+
