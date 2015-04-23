@@ -55,6 +55,91 @@ angular.module('nomLater.services', [])
   }
 
 })
+.factory('CalendarFactory', function(){
+  /*----------------------THESE VARIABLES ARE HERE TEMPORARILY-------------------------------*/
+
+  var CLIENT_ID = '211335492612-618pduc3omcj4rptt73svjba064gco3o.apps.googleusercontent.com';
+
+  var API_KEY = 'AIzaSyBs7UEnvDdAc93S8NnhPW_p9376NeLuZ9M'
+
+  var SCOPES = ['https://www.googleapis.com/auth/calendar'];
+
+  var now = new Date();
+  today = now.toISOString();
+
+  /*----------------------------------------------------------------------------------------*/
+
+  var twoHoursLater = new Date(now.getTime() + (2*1000*60*60));
+  twoHoursLater = twoHoursLater.toISOString();
+
+  var checkAuth = function(){
+    console.log("Check Auth");
+    gapi.auth.authorize({
+      'client_id': CLIENT_ID,
+      'scope': SCOPES,
+      'immediate': true
+    }, handleAuthResult);
+  }
+
+  var handleAuthResult = function(authResult) {
+    console.log("handle Auth result", authResult);
+    var authorizeDiv = document.getElementById('authorize-div');
+    if (authResult && !authResult.error) {
+      // Hide auth UI, then load Calendar client library.
+      authorizeDiv.style.display = 'none';
+      loadCalendarApi();
+    } else {
+      // Show auth UI, allowing the user to initiate authorization by
+      // clicking authorize button.
+      authorizeDiv.style.display = 'inline';
+    }
+  }
+
+  function handleAuthClick(event) {
+    console.log("handle auth click");
+    gapi.auth.authorize(
+      {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+      handleAuthResult);
+    return false;
+  }
+
+  // setup event details
+  var resource = {
+    "summary": "Sample Event " + Math.floor((Math.random() * 10) + 1),
+    "start": {
+      "dateTime": today //THIS HAS TO BE CHANGED 
+    },
+    "end": {
+      "dateTime": twoHoursLater //THIS HAS TO BE CHANGED 
+    }
+  };
+
+  var loadCalendarApi = function() {
+    console.log("load calendar api");
+    gapi.client.load('calendar', 'v3', function(){
+      var request = gapi.client.calendar.events.insert({
+        "calendarId": "christian.brandalise@gmail.com", //THIS HAS TO BE CHANGED 
+        "resource": resource
+      })
+
+      request.execute(function(resp){
+        console.log("resp", resp);
+        if(resp.status === 'confirmed'){
+          console.log("event posted to my calendar");
+                        document.getElementById('event-response').innerHTML = "Event created successfully. View it <a href='" + resp.htmlLink + "'>online here</a>.";
+
+        } else {
+          console.log("there was a problem listing the event");
+        }
+      })
+    });
+
+  }
+
+  return {
+    startCalendar: checkAuth
+  }
+})
 
 /* This custom Angular filter should produce our datetime object in the "from now" format
 popular in other apps */

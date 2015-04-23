@@ -1,6 +1,6 @@
 angular.module('nomLater.events', [])
 
-.controller('EventsController', function ($scope, $rootScope, $window, $location, Events) {
+.controller('EventsController', function ($scope, $rootScope, $window, $location, Events, CalendarFactory) {
   $rootScope.signedIn = true;
   $scope.event = {}
   $scope.eventsList = {}
@@ -62,6 +62,10 @@ angular.module('nomLater.events', [])
     }
     
   };
+
+  $scope.calendar = function(){
+    CalendarFactory.startCalendar();
+  }
   
   $scope.viewAllEvents()
   $scope.initNewEventForm()
