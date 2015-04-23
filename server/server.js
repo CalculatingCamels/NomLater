@@ -107,14 +107,16 @@ app.get('/logout', function(req, res){
 app.route('/api/events')
   .get(function(req, res){
     connectdb(function(db){
-      db.collection('events').find({datetime : { $gt: new Date().getTime()}}).toArray(function(err, docs){
+      var time = new Date().getTime()
+      console.log(time)
+      db.collection('events').find({datetime: {$gt: time}}).toArray(function(err, docs){
         db.close();
         res.status(200).send(JSON.stringify(docs));
       })
     })
   })
   .post(function(req, res){
-    req.body['attendees'] = [];
+    req.body['attendees'] = [{id: req.session.passport.user[0].googleId, name: req.session.passport.user[0].displayName}];
     req.body['creator_id']= req.session.passport.user[0].googleId;
     console.log(req.body);
     connectdb(function(db){
@@ -125,10 +127,8 @@ app.route('/api/events')
     })
   })
   .put(function(req, res){
-    //add a User's ID to the EVENT row
-    //EVENTS HAVE MANY USERS
+    console.log(req.body);
   });
  
 app.listen(process.env.PORT || 3000);
- 
 console.log('server listening on ' + (process.env.PORT || 3000));
