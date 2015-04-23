@@ -5,9 +5,27 @@ angular.module('nomLater.events', [])
   $scope.invalid = false
   $scope.shown = false
   $scope.eventsLoaded = false;
+  $scope.eventJoinError = false;
+  $scope.eventAddSuccess = false;
+
 
   $scope.showForm = function() {
     $scope.shown = !$scope.shown;
+  }
+
+  $scope.eventError = function() {
+    console.log("eventError called!");
+    $scope.eventJoinError = true;
+    $timeout(function() {
+      $scope.eventJoinError = false;
+    }, 2000);
+  }
+
+  $scope.addSuccess = function() {
+    $scope.eventAddSuccess = true;
+    $timeout(function() {
+      $scope.eventAddSuccess = false;
+    }, 2000);
   }
 
   $scope.joinEvent = function(evt) {
@@ -16,12 +34,12 @@ angular.module('nomLater.events', [])
       Events.joinEvent(evt);
       CalendarFactory.startCalendar(evt);
     } else {
-      alert("You are already going to this event.")
+      $scope.eventError();
     }
   }
 
   $scope.addEvent = function() {
-    console.log("AddEvent called")
+    
     if ($scope.newEvent.description !== "" &&
         $scope.newEvent.location !== "" &&
         $scope.newEvent.datetime !== "" ) {
@@ -38,8 +56,8 @@ angular.module('nomLater.events', [])
             return Events.addEvent($scope.newEvent)
           })
           .then(function(newEvent) {
-            alert('Your event has been created: ', newEvent.description);
             CalendarFactory.startCalendar($scope.newEvent);
+            $scope.addSuccess();
             $scope.viewAllEvents();
             $scope.initNewEventForm()
           });
