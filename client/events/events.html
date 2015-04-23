@@ -18,7 +18,11 @@
 <div id='container'>
   
   <div class="events-header"><h3>Events in Your Network</h3></div>
-  <ul class='events'>
+  <div class="spinner" ng-hide="eventsLoaded">
+    <div class="cube1"></div>
+    <div class="cube2"></div>
+  </div>
+  <ul class='events' ng-show="eventsLoaded">
     <li class = 'event' ng-repeat="event in eventsList | orderBy:'datetime'">
       <div class='eventInfo'>
         <div class='creator'>{{event.attendees[0].name}}</div>
@@ -31,6 +35,7 @@
           <div class='attendee' ng-repeat="attendee in event.attendees"><a href="">{{attendee.name}}</a></div>
         </div>
         <button class="submit-button" ng-click='joinEvent(event)'>Join this event!</button>
+        <hr>
       </div>
     </li>
   </ul>
