@@ -6,7 +6,7 @@ angular.module('nomLater.services', [])
     if(user_id){
       return $http({
         method: 'GET',
-        url: '/api/user/' + user_id + 'events'
+        url: '/api/user/' + user_id + '/events'
       }).then(function(res) {
         return res.data
       })

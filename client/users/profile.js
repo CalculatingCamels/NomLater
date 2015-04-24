@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('nomLater', ['ngRoute'])
+angular.module('nomLater')
 
 .controller('profileController', function($scope, $http, $rootScope, $routeParams, Events) {
   $scope.eventsList = [];
@@ -15,5 +15,7 @@ angular.module('nomLater', ['ngRoute'])
     });
 
   };
-  viewAllEvents();
+
+  $scope.viewAllEvents();
+
 });
