@@ -9,9 +9,9 @@ nomLater.config(['$routeProvider', function($routeProvider) {
         templateUrl: '/users/signin.html',
         authenticate: false
     }).
-      when('/users/:user_id', {
-        templateUrl: '/users/profile.html',
-        controller: 'profileCtrl',
+      when('/myevents', {
+        templateUrl: '/users/myevents.html',
+        controller: 'myeventsController',
         authenticate: true
     }).
       when('/events', {
@@ -45,7 +45,6 @@ nomLater.config(['$routeProvider', function($routeProvider) {
 
 nomLater.factory('globalAuth', function($http){
   var checkAuth = function(){
-    var test;
     return $http({
       method: 'GET',
       url: '/api/auth'

@@ -12,6 +12,8 @@ angular.module('nomLater.services', [])
     })
   };
 
+  
+
   var joinEvent = function(event) {
       return $http({
         method: 'PUT',
