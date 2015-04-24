@@ -1,32 +1,47 @@
 angular.module('nomLater.events', [])
 
-.controller('EventsController', function ($scope, $rootScope, $window, $location, Events, $http) {
-  $rootScope.signedIn = true;
-  $rootScope.user = {}
-  $scope.event = {}
-  $scope.eventsList = {}
-  $scope.pageNumber = 0
+.controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory, $timeout) {
+  $scope.eventsList = [];
   $scope.invalid = false
   $scope.shown = false
-  $scope.user = {};
   $scope.eventsLoaded = false;
+  $scope.eventJoinError = false;
+  $scope.eventAddSuccess = false;
+
 
   $scope.showForm = function() {
     $scope.shown = !$scope.shown;
   }
 
+  $scope.eventError = function() {
+    console.log("eventError called!");
+    $scope.eventJoinError = true;
+    $timeout(function() {
+      $scope.eventJoinError = false;
+    }, 1500);
+  }
+
+  $scope.addSuccess = function() {
+    $scope.eventAddSuccess = true;
+    $timeout(function() {
+      $scope.eventAddSuccess = false;
+    }, 1500);
+  }
+
   $scope.joinEvent = function(evt) {
     //dont add the user to the event if they are alreay apart of it. 
-    $scope.event = evt; 
     if(!containsUser($scope.userInfo.name, evt)){
       Events.joinEvent(evt);
+      CalendarFactory.startCalendar(evt);
+      $scope.addSuccess();
+      evt.attendees.push($scope.userInfo);
     } else {
-      alert("You are already going to this event.")
+      $scope.eventError();
     }
   }
 
   $scope.addEvent = function() {
-    console.log("AddEvent called")
+    
     if ($scope.newEvent.description !== "" &&
         $scope.newEvent.location !== "" &&
         $scope.newEvent.datetime !== "" ) {
@@ -43,7 +58,8 @@ angular.module('nomLater.events', [])
             return Events.addEvent($scope.newEvent)
           })
           .then(function(newEvent) {
-            alert('Your event has been created: ', newEvent.description);
+            CalendarFactory.startCalendar($scope.newEvent);
+            $scope.addSuccess();
             $scope.viewAllEvents();
             $scope.initNewEventForm()
           });
@@ -51,6 +67,11 @@ angular.module('nomLater.events', [])
     } else {
       $scope.invalid = true
     }     
+  }
+
+  $scope.deleteEvent = function(event) {
+    Events.deleteEvent(event);
+    $scope.viewAllEvents();
   }
 
   $scope.initNewEventForm = function() {
@@ -64,7 +85,7 @@ angular.module('nomLater.events', [])
   $scope.viewAllEvents = function() {
     $scope.eventsLoaded = false;
 
-    Events.getEvents($scope.pageNumber)
+    Events.getEvents()
     .then(function(data) {
       $scope.eventsList = data;
       $scope.eventsLoaded = true;
@@ -87,10 +108,8 @@ angular.module('nomLater.events', [])
   };
 
   $scope.initUser = function(){
-    if($rootScope.userInfo === undefined){
+    if(!$rootScope.userInfo){
       $rootScope.userInfo = {};
-      //Yeah... i know it doesnt make sense that it
-      // is in events
       Events.getUserInfo();
     }
   }
@@ -106,14 +125,9 @@ angular.module('nomLater.events', [])
     })
   }
 
-
-  
   $scope.viewAllEvents()
   $scope.initNewEventForm()
   $scope.initUser()
-
-
-   //~~~~~ HELPERS ~~~~~~
 
    var containsUser = function(name, evnt){
       for(var i = 0; i < evnt.attendees.length; i++){

@@ -81,7 +81,7 @@ app.get('/api/userinfo', function(req, res){
   res.status(200).json(req.session.passport.user[0]);
 })
 
-app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile']}));
+app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/calendar']}));
 
 app.get('/auth/google/callback', passport.authenticate('google', {successRedirect: '/#/events', failureRedirect: '/'}));
 
@@ -107,15 +107,25 @@ app.route('/api/events')
       db.collection('events').insert([req.body], function(err, result){
         db.close();
         res.status(200).json({'success':true});
-      })
-    })
+      });
+    });
   })
   .put(function(req, res){
-    console.log(req.body);
+    connectdb(function(db){
+      db.collection('events').update({"_id": ObjectID(req.body.eventId)}, {$push: {attendees: req.body.userInfo}}, function(err, result){
+        db.close();
+        res.status(200).json({'success':true});
+      });
+    });
   })
   .delete(function(req, res){
-    console.log(req.body);
-    //assume req.body.event_id is the event's ID
+    //Pass "eventId" into this request.
+    connectdb(function(db){
+      db.collection('events').remove({"_id": ObjectID(req.body.eventId)}, function(err, result){
+        db.close();
+        res.status(200).json({'success':result.rows.length === 1});
+      });
+    });
   });
 
 app.route('/api/user/events')

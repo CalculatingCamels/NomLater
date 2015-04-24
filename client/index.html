@@ -7,7 +7,10 @@
     <link rel="icon" href="/styles/brand.png">
     <link rel="stylesheet" href="/styles/app.css">
     <link rel="stylesheet" href="/bower_components/bootstrap-css/css/bootstrap.min.css">
+    
+    <!-- External Styling Sources -->
     <link href='//fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     
   </head>
 
@@ -15,9 +18,9 @@
     <div class="full-wrapper">
       <div class="navigation" ng-if="path !== '/'">
         <ul class="menu">
-          <li><a href="/#/events"><img class="brand" src="styles/brand.png"/></a></li> 
-          <li ><a href="/logout">Sign Out</a></li>
-          <li><p class="username" ng-show="userInfo.name">Welcome, {{userInfo.name}}!</p></li>
+          <li><a href="/#/events"><img class="brand link" src="styles/brand.png"/></a></li> 
+          <li ><a href="/logout" class="link">Sign Out</a></li>
+          <li><p class="username" ng-show="userInfo.name">Welcome, <a href="" class="link">{{userInfo.name}}</a>!</p></li>
         </ul>
       </div>
       <div ng-view></div>
@@ -28,7 +31,7 @@
       <p>Architects: Tyler L., Jamie S., Christian B., Brian S., and Charlie M.</p>
       <p>&copy CalculatingCamels</p>
     </div>
-
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
     <script src ='/bower_components/angular/angular.js'></script>
     <script src ='/bower_components/angular-route/angular-route.js'></script>
     <script src ='/app.js'></script>
