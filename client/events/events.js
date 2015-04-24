@@ -121,11 +121,9 @@ angular.module('nomLater.events', [])
   }
 
   $scope.initNewEventForm = function() {
-    console.log("HERE")
     $scope.newEvent = {}
     $scope.newEvent.time = new Date(new Date().toISOString().substr(0,16))
     $scope.newEvent.date = new Date()
-    console.log("THERE")
   }
 
   $scope.viewAllEvents = function() {

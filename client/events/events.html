@@ -33,7 +33,7 @@
           <div class='description'><h3><strong>{{event.description}}</strong><h3></div>
           <div class='creator'><a class="link" href="">~ {{event.attendees[0].name}}</a></div>
           <div class='location'>Location: <strong>{{event.location}}</strong></div>
-          <div class='time'>Time: <strong>{{event.datetime | date:'MM/dd/yyyy @ h:mma'}}</strong></div>        
+          <div class='time'>Time: <strong>{{event.datetime-18000000 | date:'MM/dd/yyyy @ h:mma'}}</strong></div>        
           <div class='reservation' ng-if="event.reserve"><a href="{{event.reserve}}">Make a Reservation</a></div>   
           <button class="submit-button action" ng-click='joinEvent(event)' ng-hide='isAttending(event)'>RSVP</button>
           <button class="submit-button leave" ng-click='leaveEvent(event)' ng-show='isAttending(event)'>Leave Event</button>
