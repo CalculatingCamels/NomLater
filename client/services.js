@@ -1,6 +1,6 @@
 angular.module('nomLater.services', [])
 
-.factory('Events', function($http, $rootScope) {
+.factory('Events', function($http, $rootScope, CalendarFactory) {
 
   var getEvents = function(user_id) {
     //If you pass in a user_id, it will grab events associated with that user.
@@ -23,6 +23,9 @@ angular.module('nomLater.services', [])
 
 
   var joinEvent = function(event) {
+    console.log(event);
+      // var formatedEvent = formatEvent(event);
+      CalendarFactory.startCalendar(event);
       return $http({
         method: 'PUT',
         url: '/api/events', 
@@ -33,12 +36,8 @@ angular.module('nomLater.services', [])
   };
 
   var addEvent = function(event) {
-    var date = event.date.toISOString().substr(0,10);
-    var time = event.time.toISOString().substr(11,5);
-      var datetime = new Date(date + ' ' + time);
-      var unix = datetime.getTime();
-      event.datetime = unix;
-      event.createdAt = new Date().getTime();
+      var formatedEvent = formatEvent(event);
+      CalendarFactory.startCalendar(event);
       return $http({
         method: 'POST',
         url: '/api/events',
@@ -68,6 +67,18 @@ angular.module('nomLater.services', [])
     })
   };
 
+  function formatEvent(event){
+    var date = event.date.toISOString().substr(0,10);
+    var time = event.time.getTimezoneOffset();
+    time = event.time.toISOString().substr(11,5);
+    var datetime = new Date(date + ' ' + time);
+    var unix = datetime.getTime();
+    //for central time
+    event.datetime = unix-18000000;
+    event.createdAt = new Date().getTime();
+    return event
+  }
+
   return {
     getEvents : getEvents,
     joinEvent: joinEvent,
@@ -90,15 +101,15 @@ angular.module('nomLater.services', [])
   var init = function(event, user){    
   console.log("Event", event);
   var eventTime = new Date(event.datetime);
-  date = eventTime.toISOString()
-  
+  var date = eventTime.toISOString()
+  // var date = event.date.toISOString();
   // var listOfPeople = [];
   // event.attendees.forEach(function(attendee){
   //   listOfPeople.push(attendee.name);
   // })
 
-  var twoHoursLater = new Date(eventTime.getTime() + (1*1000*60*60));
-  twoHoursLater = twoHoursLater.toISOString();
+  var oneHoursLater = new Date(eventTime.getTime() + (1*1000*60*60));
+  oneHoursLater = oneHoursLater.toISOString();
   // setup event details
     resource = {
       "location": event.location,
@@ -108,7 +119,7 @@ angular.module('nomLater.services', [])
         "dateTime": date //THIS HAS TO BE CHANGED TO EVENT TIME;
       },
       "end": {
-        "dateTime": twoHoursLater //THIS HAS TO BE CHANGED TO ONE HOUR LATER;
+        "dateTime": oneHoursLater //THIS HAS TO BE CHANGED TO ONE HOUR LATER;
       }
     };
     gapi.auth.authorize({

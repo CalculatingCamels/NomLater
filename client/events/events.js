@@ -68,10 +68,9 @@ angular.module('nomLater.events', [])
     //dont add the user to the event if they are alreay apart of it. 
     if(!containsUser($scope.userInfo.name, evt)){
       Events.joinEvent(evt);
-      CalendarFactory.startCalendar(evt);
       $scope.joinSuccess();
       evt.attendees.push($scope.userInfo);
-      CalendarFactory.startCalendar(evt);
+      // CalendarFactory.startCalendar(evt);
     } else {
       $scope.eventError();
     }
@@ -79,10 +78,8 @@ angular.module('nomLater.events', [])
   }
 
   $scope.addEvent = function() {
-    debugger;
     if ($scope.newEvent.description !== "" &&
         $scope.newEvent.location !== "") {
-
           $scope.newEvent.attendees = [];
           $scope.newEvent.attendees.push({name: $scope.userInfo.name});
           $scope.eventsList.push($scope.newEvent);
@@ -90,6 +87,7 @@ angular.module('nomLater.events', [])
           console.log($scope.newEvent);
           var loc = $scope.newEvent.location;
           $scope.invalid = false
+          console.log("$scope newEvent: ", $scope.newEvent);
 
           openTable(loc, function(url){
             $scope.newEvent.reserve = url;
@@ -97,8 +95,7 @@ angular.module('nomLater.events', [])
             return Events.addEvent($scope.newEvent)
           })
           .then(function(newEvent) {
-            CalendarFactory.startCalendar($scope.newEvent);
-
+            // CalendarFactory.startCalendar(newEvent);
             Events.getEvents()
             .then(function(data) {
               $scope.eventsList = data;
