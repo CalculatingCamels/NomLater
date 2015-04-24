@@ -172,16 +172,12 @@
   position:absolute;
   bottom:0;
   width:100%;
-  clear: all;
+  margin:0 auto;
 }
 
 .full-wrap:after {
   content: "";
   display: block;
-}
-
-.footer, .full-wrap:after {
-
 }
 
 .footer p {
