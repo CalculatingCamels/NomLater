@@ -3,6 +3,7 @@ angular.module('nomLater.services', [])
 .factory('Events', function($http, $rootScope) {
 
   var getEvents = function(user_id) {
+    //If you pass in a user_id, it will grab events associated with that user.
     if(user_id){
       return $http({
         method: 'GET',
