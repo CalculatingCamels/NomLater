@@ -2,13 +2,22 @@ angular.module('nomLater.services', [])
 
 .factory('Events', function($http, $rootScope) {
 
-  var getEvents = function() {
-    return $http({
-      method: 'GET',
-      url: '/api/events'
-    }).then(function(res) {
-      return res.data
-    })
+  var getEvents = function(user_id) {
+    if(user_id){
+      return $http({
+        method: 'GET',
+        url: '/api/user/' + user_id + 'events'
+      }).then(function(res) {
+        return res.data
+      })
+    } else{
+      return $http({
+        method: 'GET',
+        url: '/api/events'
+      }).then(function(res) {
+        return res.data
+      })
+    }
   };
 
 

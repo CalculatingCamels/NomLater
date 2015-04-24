@@ -128,10 +128,10 @@ app.route('/api/events')
     });
   });
 
-app.route('/api/user/events')
+app.route('/api/user/:user_id/events')
   .get(function(req, res){
     connectdb(function(db){
-      var id = req.session.passport.user[0].googleId;
+      var id = req.params.user_id;
       db.collection('events').find({ attendees: {$elemMatch: {
         'id': id
       }}}).toArray(function(err, result){
