@@ -6,6 +6,7 @@ angular.module('nomLater.events', [])
   $scope.shown = false
   $scope.eventsLoaded = false;
   $scope.eventJoinError = false;
+  $scope.eventJoinSuccess = false;
   $scope.eventAddSuccess = false;
   $scope.showGuestList = false;
 
@@ -29,6 +30,13 @@ angular.module('nomLater.events', [])
     $scope.eventAddSuccess = true;
     $timeout(function() {
       $scope.eventAddSuccess = false;
+    }, 1500);
+  }
+
+  $scope.joinSuccess = function() {
+    $scope.eventJoinSuccess = true;
+    $timeout(function() {
+      $scope.eventJoinSuccess;
     }, 1500);
   }
 
@@ -92,6 +100,7 @@ angular.module('nomLater.events', [])
     Events.getEvents()
     .then(function(data) {
       $scope.eventsList = data;
+      console.log($scope.eventsList);
       $scope.eventsLoaded = true;
     });
 

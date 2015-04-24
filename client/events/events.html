@@ -31,10 +31,10 @@
       <div class="row">
 
         <div class="col-md-6 event-content-left">
+          <div class='description'><h3><strong>{{event.description}}</strong><h3></div>
           <div class='creator'><a class="link" href="">~ {{event.attendees[0].name}}</a></div>
-          <div class='description'><strong>{{event.description}}</strong></div>
-          <div class='location'>Where: <strong>{{event.location}}</strong></div>
-          <div class='time'>When: <strong>{{event.datetime | date : 'MM/dd/yyyy @ h:mma' }}</strong></div>        
+          <div class='location'>Location: <strong>{{event.location}}</strong></div>
+          <div class='time'>Time: <strong>{{event.datetime | date : 'MM/dd/yyyy @ h:mma' }}</strong></div>        
           <div class='reservation' ng-if="event.reserve"><a href="{{event.reserve}}">Make a Reservation</a></div>   
           <button class="submit-button action" ng-click='joinEvent(event)'>RSVP</button>
           <br>
@@ -42,8 +42,8 @@
         </div>
 
         <div class="col-md-6 event-content-right">
-          <button class="submit-button" ng-click="viewGuests()">Guest List ({{event.attendees.length-1}})</button>
-          <div class='attendee' ng-repeat="attendee in event.attendees" ng-if="attendee !== event.attendees[0]" ng-show="showGuestList"><a class="link" href="">@{{attendee.name}}</a></div>
+          <button class="submit-button" ng-click="">Guest List ({{event.attendees.length-1}})</button>
+          <div class='attendee' ng-repeat="attendee in event.attendees" ng-if="attendee !== event.attendees[0]" ng-show=""><a class="link" href="">@{{attendee.name}}</a></div>
         </div>
           
 
@@ -59,7 +59,7 @@
     <p>Success! Your Event was Added!</p>
   </div>
 
-  <div ng-show="eventAddSuccess" class="absolute-center">
+  <div ng-show="eventJoinSuccess" class="absolute-center">
     <i class="fa fa-check-circle-o fa-5x"></i>
     <p>Nice! We've added {{event.attendees[0].name}}'s event to your calendar!</p>
   </div>
