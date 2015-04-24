@@ -88,13 +88,19 @@ angular.module('nomLater.services', [])
   console.log("Event", event);
   var eventTime = new Date(event.datetime);
   date = eventTime.toISOString()
+  
+  // var listOfPeople = [];
+  // event.attendees.forEach(function(attendee){
+  //   listOfPeople.push(attendee.name);
+  // })
 
-  var twoHoursLater = new Date(eventTime.getTime() + (2*1000*60*60));
+  var twoHoursLater = new Date(eventTime.getTime() + (1*1000*60*60));
   twoHoursLater = twoHoursLater.toISOString();
   // setup event details
     resource = {
       "location": event.location,
       "summary": event.description,
+      // "attendees" : listOfPeople,
       "start": {
         "dateTime": date //THIS HAS TO BE CHANGED TO EVENT TIME;
       },
@@ -108,7 +114,6 @@ angular.module('nomLater.services', [])
       'immediate': true
     }, handleAuthResult);
   }
-
   var handleAuthResult = function(authResult) {
 
     if (authResult && !authResult.error) {
@@ -128,6 +133,7 @@ angular.module('nomLater.services', [])
 
 
   var loadCalendarApi = function() {
+   console.log("Resource:", resource);
     gapi.client.load('calendar', 'v3', function(){
       var request = gapi.client.calendar.events.insert({
         "calendarId": "primary", 
@@ -136,7 +142,7 @@ angular.module('nomLater.services', [])
 
       request.execute(function(resp){
         if(resp.status === 'confirmed'){
-          console.log("event posted to my calendar");
+          console.log("event posted to my calendar", resp);
         } else {
           console.log("there was a problem listing the event");
         }

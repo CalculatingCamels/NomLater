@@ -53,9 +53,9 @@ angular.module('nomLater.events', [])
     console.log(evt);
     if(!containsUser($scope.userInfo.name, evt)){
       Events.joinEvent(evt);
-      CalendarFactory.startCalendar(evt);
       $scope.addSuccess();
       evt.attendees.push($scope.userInfo);
+      CalendarFactory.startCalendar(evt);
     } else {
       $scope.eventError();
     }
