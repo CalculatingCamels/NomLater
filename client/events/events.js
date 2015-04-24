@@ -6,11 +6,24 @@ angular.module('nomLater.events', [])
   $scope.shown = false
   $scope.eventsLoaded = false;
   $scope.eventJoinError = false;
+  $scope.eventJoinSuccess = false;
   $scope.eventAddSuccess = false;
-
+  $scope.activeEventIndex;
 
   $scope.showForm = function() {
     $scope.shown = !$scope.shown;
+  }
+
+  $scope.showGuests = function(index) {
+    $scope.activeEventIndex = index;
+  }
+
+  $scope.hideGuests = function(index) {
+    $scope.activeEventIndex = null;
+  }
+
+  $scope.isShowing = function(index) {
+    return $scope.activeEventIndex === index;
   }
 
   $scope.eventError = function() {
@@ -25,6 +38,13 @@ angular.module('nomLater.events', [])
     $scope.eventAddSuccess = true;
     $timeout(function() {
       $scope.eventAddSuccess = false;
+    }, 1500);
+  }
+
+  $scope.joinSuccess = function() {
+    $scope.eventJoinSuccess = true;
+    $timeout(function() {
+      $scope.eventJoinSuccess;
     }, 1500);
   }
 
