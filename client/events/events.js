@@ -18,14 +18,14 @@ angular.module('nomLater.events', [])
     $scope.eventJoinError = true;
     $timeout(function() {
       $scope.eventJoinError = false;
-    }, 2000);
+    }, 1500);
   }
 
   $scope.addSuccess = function() {
     $scope.eventAddSuccess = true;
     $timeout(function() {
       $scope.eventAddSuccess = false;
-    }, 2000);
+    }, 1500);
   }
 
   $scope.joinEvent = function(evt) {
@@ -65,6 +65,11 @@ angular.module('nomLater.events', [])
     } else {
       $scope.invalid = true
     }     
+  }
+
+  $scope.deleteEvent = function(event) {
+    Events.deleteEvent(event);
+    $scope.viewAllEvents();
   }
 
   $scope.initNewEventForm = function() {
@@ -121,9 +126,6 @@ angular.module('nomLater.events', [])
   $scope.viewAllEvents()
   $scope.initNewEventForm()
   $scope.initUser()
-
-
-   //~~~~~ HELPERS ~~~~~~
 
    var containsUser = function(name, evnt){
       for(var i = 0; i < evnt.attendees.length; i++){

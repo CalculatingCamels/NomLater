@@ -85,6 +85,15 @@
   background: #a5a5a5;
 }
 
+.submit-button.danger {
+  font-size: 0.7em;
+  background: #FFAFB5;
+}
+
+.submit-button.danger:hover {
+  background: #FF858C;
+}
+
 .brand {
   height: 60px;
   width: 82px;
