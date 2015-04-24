@@ -10,6 +10,8 @@ angular.module('nomLater.events', [])
   $scope.eventAddSuccess = false;
   $scope.attendingEvent; 
   $scope.activeEventIndex;
+  
+
 
   $scope.showForm = function() {
     $scope.shown = !$scope.shown;
@@ -84,7 +86,7 @@ angular.module('nomLater.events', [])
           $scope.newEvent.attendees.push({name: $scope.userInfo.name});
           $scope.eventsList.push($scope.newEvent);
           $scope.invalid = false
-
+          console.log($scope.newEvent);
           var loc = $scope.newEvent.location;
           $scope.invalid = false
 
@@ -145,9 +147,13 @@ angular.module('nomLater.events', [])
   };
 
   $scope.initUser = function(){
+    $scope.userLoaded = false;
     if(!$rootScope.userInfo){
       $rootScope.userInfo = {};
-      Events.getUserInfo();
+      Events.getUserInfo()
+      .then(function() {
+        $scope.userLoaded = true;
+      });
     }
   }
 
@@ -162,9 +168,9 @@ angular.module('nomLater.events', [])
     })
   }
 
+  $scope.initUser()
   $scope.viewAllEvents()
   $scope.initNewEventForm()
-  $scope.initUser()
 
    var containsUser = function(name, evnt){
       for(var i = 0; i < evnt.attendees.length; i++){
