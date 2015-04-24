@@ -90,15 +90,13 @@ angular.module('nomLater.services', [])
   }
 
   var handleAuthResult = function(authResult) {
-    var authorizeDiv = document.getElementById('authorize-div');
     if (authResult && !authResult.error) {
-      // Hide auth UI, then load Calendar client library.
-      authorizeDiv.style.display = 'none';
       loadCalendarApi();
     } else {
       // Show auth UI, allowing the user to initiate authorization by
       // clicking authorize button.
-      authorizeDiv.style.display = 'inline';
+      // authorizeDiv.style.display = 'inline';
+      //TODO NEED TO POST ANGULAR ALERT DIV HERE.
     }
   }
 
