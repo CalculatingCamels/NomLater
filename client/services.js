@@ -101,17 +101,16 @@ angular.module('nomLater.services', [])
   }
 
   var handleAuthResult = function(authResult) {
+
     if (authResult && !authResult.error) {
       loadCalendarApi();
     } else {
-      // Show auth UI, allowing the user to initiate authorization by
-      // clicking authorize button.
-      // authorizeDiv.style.display = 'inline';
-      //TODO NEED TO POST ANGULAR ALERT DIV HERE.
+      handleAuthClick();
+      loadCalendarApi(); //Might not need this here since handleAuthClick calls this function again;
     }
   }
 
-  function handleAuthClick(event) {
+  var handleAuthClick = function(event) {
     gapi.auth.authorize(
       {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
       handleAuthResult);
