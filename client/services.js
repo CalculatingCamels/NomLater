@@ -37,10 +37,10 @@ angular.module('nomLater.services', [])
   };
 
   var deleteEvent = function(evnt) {
+    console.log(evnt._id);
     return $http({
       method: 'DELETE',
-      url: '/api/events',
-      data: evnt
+      url: '/api/events/' + evnt._id
     }).then(function(res) {
       return res.data;
     })

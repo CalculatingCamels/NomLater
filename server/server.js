@@ -117,13 +117,13 @@ app.route('/api/events')
         res.status(200).json({'success':true});
       });
     });
-  })
-  .delete(function(req, res){
-    //Pass "eventId" into this request.
+  });
+
+  app.route('/api/events/:eventId').delete(function(req, res){
     connectdb(function(db){
-      db.collection('events').remove({"_id": ObjectID(req.body.eventId)}, function(err, result){
+      db.collection('events').remove({"_id": ObjectID(req.params.eventId)}, function(err, result){
         db.close();
-        res.status(200).json({'success':result.rows.length === 1});
+        res.status(200).json({'success':result.ok === 1});
       });
     });
   });
