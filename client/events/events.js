@@ -1,7 +1,7 @@
 angular.module('nomLater.events', [])
 
 .controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory, $timeout) {
-  $scope.eventsList = {}
+  $scope.eventsList = [];
   $scope.invalid = false
   $scope.shown = false
   $scope.eventsLoaded = false;
@@ -31,6 +31,7 @@ angular.module('nomLater.events', [])
   $scope.joinEvent = function(evt) {
     //dont add the user to the event if they are alreay apart of it. 
     if(!containsUser($scope.userInfo.name, evt)){
+      evt.attendees.push($scope.userInfo);
       Events.joinEvent(evt);
       CalendarFactory.startCalendar(evt);
     } else {
@@ -83,7 +84,7 @@ angular.module('nomLater.events', [])
   $scope.viewAllEvents = function() {
     $scope.eventsLoaded = false;
 
-    Events.getEvents($scope.pageNumber)
+    Events.getEvents()
     .then(function(data) {
       $scope.eventsList = data;
       $scope.eventsLoaded = true;
