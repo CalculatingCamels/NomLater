@@ -1,18 +1,13 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-var nomLater = angular.module('nomLater', ['ngRoute','nomLater.services','nomLater.events']);
+var nomLater = angular.module('nomLater', ['ngRoute','nomLater.services','nomLater.events', 'ngFx', 'ngAnimate']);
 
 nomLater.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
       when('/', {
         templateUrl: '/users/signin.html',
         authenticate: false
-    }).
-      when('/user/:user_id', {
-        templateUrl: '/users/profile.html',
-        controller: 'profileController',
-        authenticate: true
     }).
       when('/events', {
         templateUrl: '/events/events.html',

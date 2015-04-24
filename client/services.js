@@ -3,6 +3,7 @@ angular.module('nomLater.services', [])
 .factory('Events', function($http, $rootScope) {
 
   var getEvents = function(user_id) {
+    //If you pass in a user_id, it will grab events associated with that user.
     if(user_id){
       return $http({
         method: 'GET',
@@ -32,7 +33,9 @@ angular.module('nomLater.services', [])
   };
 
   var addEvent = function(event) {
-      var datetime = new Date(event.date + ' ' + event.time);
+    var date = event.date.toISOString().substr(0,10);
+    var time = event.time.toISOString().substr(11,5);
+      var datetime = new Date(date + ' ' + time);
       var unix = datetime.getTime();
       event.datetime = unix;
       event.createdAt = new Date().getTime();

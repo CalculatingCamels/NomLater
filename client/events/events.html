@@ -2,7 +2,7 @@
     <button class="submit-button" id="add-event-button" ng-click="showForm()">Add an Event</button>
   </div>
 
-  <div class='addevent' ng-show="shown">
+  <div class='addevent fx-fade-down' ng-show="shown">
     <form name="eventForm" ng-submit="addEvent()">
       <input type= "text" placeholder="Event Location" ng-model = "newEvent.location">
       <input type= "text" placeholder="Event Description" ng-model = "newEvent.description">
@@ -25,7 +25,7 @@
 
   <ul class="events" ng-show="eventsLoaded">
 
-    <li class = "event" ng-repeat="(eventIndex, event) in eventsList | orderBy:'datetime'">
+    <li class = "event fx-fade-down" ng-repeat="(eventIndex, event) in eventsList | orderBy:'datetime'">
 
       <div class="row">
 
@@ -33,9 +33,10 @@
           <div class='description'><h3><strong>{{event.description}}</strong><h3></div>
           <div class='creator'><a class="link" href="">~ {{event.attendees[0].name}}</a></div>
           <div class='location'>Location: <strong>{{event.location}}</strong></div>
-          <div class='time'>Time: <strong>{{event.datetime | date : 'MM/dd/yyyy @ h:mma' }}</strong></div>        
+          <div class='time'>Time: <strong>{{event.datetime-18000000 | date:'MM/dd/yyyy @ h:mma'}}</strong></div>        
           <div class='reservation' ng-if="event.reserve"><a href="{{event.reserve}}">Make a Reservation</a></div>   
-          <button class="submit-button action" ng-click='joinEvent(event)'>RSVP</button>
+          <button class="submit-button action" ng-click='joinEvent(event)' ng-hide='isAttending(event)'>RSVP</button>
+          <button class="submit-button leave" ng-click='leaveEvent(event)' ng-show='isAttending(event)'>Leave Event</button>
           <br>
           <button class="submit-button danger" ng-click="deleteEvent(event)" ng-if="userInfo.name===event.attendees[0].name">Cancel</button>
         </div>

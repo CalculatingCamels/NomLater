@@ -1,6 +1,6 @@
 angular.module('nomLater.events', [])
 
-.controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory, $timeout) {
+.controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory, $timeout, $interval) {
   $scope.eventsList = [];
   $scope.invalid = false
   $scope.shown = false
@@ -8,7 +8,10 @@ angular.module('nomLater.events', [])
   $scope.eventJoinError = false;
   $scope.eventJoinSuccess = false;
   $scope.eventAddSuccess = false;
+  $scope.attendingEvent; 
   $scope.activeEventIndex;
+  
+
 
   $scope.showForm = function() {
     $scope.shown = !$scope.shown;
@@ -48,6 +51,19 @@ angular.module('nomLater.events', [])
     }, 1000);
   }
 
+  $scope.isAttending = function(evnt) {
+    for (var i=0; i < evnt.attendees.length; i++) {
+      if (evnt.attendees[i].name === $scope.userInfo.name) {
+        return true;
+      }
+    }
+    return false; 
+  }
+
+  $scope.leaveEvent = function(evt) {
+    // Will remove people from the google event and update the page
+  }
+
   $scope.joinEvent = function(evt) {
     //dont add the user to the event if they are alreay apart of it. 
     console.log(evt);
@@ -59,19 +75,19 @@ angular.module('nomLater.events', [])
     } else {
       $scope.eventError();
     }
+    $scope.attendingEvent = true;
   }
 
   $scope.addEvent = function() {
-    
+    debugger;
     if ($scope.newEvent.description !== "" &&
-        $scope.newEvent.location !== "" &&
-        $scope.newEvent.datetime !== "" ) {
+        $scope.newEvent.location !== "") {
 
           $scope.newEvent.attendees = [];
           $scope.newEvent.attendees.push({name: $scope.userInfo.name});
-          $scope.invalid = false
           $scope.eventsList.push($scope.newEvent);
-
+          $scope.invalid = false
+          console.log($scope.newEvent);
           var loc = $scope.newEvent.location;
           $scope.invalid = false
 
@@ -82,9 +98,14 @@ angular.module('nomLater.events', [])
           })
           .then(function(newEvent) {
             CalendarFactory.startCalendar($scope.newEvent);
+
+            Events.getEvents()
+            .then(function(data) {
+              $scope.eventsList = data;
+            });
+
+            $scope.initNewEventForm();
             $scope.addSuccess();
-            // $scope.viewAllEvents();
-            $scope.initNewEventForm()
           });
 
     } else {
@@ -100,15 +121,12 @@ angular.module('nomLater.events', [])
       $scope.viewAllEvents();
     })
 
-    $scope.eventsLoaded = true;
   }
 
   $scope.initNewEventForm = function() {
     $scope.newEvent = {}
-    $scope.newEvent.description
-    $scope.newEvent.location
-    $scope.newEvent.time = (new Date()).toTimeString().substr(0,5)
-    $scope.newEvent.date = new Date(new Date() + new Date().getTimezoneOffset()*60000).toISOString().substr(0,10)    
+    $scope.newEvent.time = new Date(new Date().toISOString().substr(0,16))
+    $scope.newEvent.date = new Date()
   }
 
   $scope.viewAllEvents = function() {
@@ -120,26 +138,23 @@ angular.module('nomLater.events', [])
       $scope.eventsLoaded = true;
     });
 
-  };
+    $interval(function() {
+      Events.getEvents()
+      .then(function(data) {
+        $scope.eventsList = data;
+      })
+     }, 60000); 
 
-  $scope.nextPage = function() {
-    // need some way to limit how many pages people can go forward; it seems to get messed up if people 
-    // navigate past where there are no more results to show.
-    $scope.pageNumber++
-    $scope.viewAllEvents()
-  };
-  
-  $scope.prevPage = function() {
-    if ($scope.pageNumber > 0) {
-      $scope.pageNumber--
-      $scope.viewAllEvents()
-    }
   };
 
   $scope.initUser = function(){
+    $scope.userLoaded = false;
     if(!$rootScope.userInfo){
       $rootScope.userInfo = {};
-      Events.getUserInfo();
+      Events.getUserInfo()
+      .then(function() {
+        $scope.userLoaded = true;
+      });
     }
   }
 
@@ -148,15 +163,15 @@ angular.module('nomLater.events', [])
       method: "GET",
       url: "https://opentable.herokuapp.com/api/restaurants?city=Austin&name=" + name
     }).then(function(r){ 
-      if(r.data.total_entries === 1) {
-       cb(r.data.restaurants[0].mobile_reserve_url);
+      if(r.data.total_entries >= 1) {
+       cb(r.data.restaurants[0].reserve_url);
       }   
     })
   }
 
+  $scope.initUser()
   $scope.viewAllEvents()
   $scope.initNewEventForm()
-  $scope.initUser()
 
    var containsUser = function(name, evnt){
       for(var i = 0; i < evnt.attendees.length; i++){
