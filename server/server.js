@@ -117,6 +117,17 @@ app.route('/api/events')
     console.log(req.body);
     //assume req.body.event_id is the event's ID
   });
- 
+
+app.route('/api/user/events')
+  .get(function(req, res){
+    connectdb(function(db){
+      var id = req.session.passport.user[0].googleId;
+      db.collection('events').find({ attendees: {$elemMatch: {
+        'id': id
+      }}}).toArray(function(err, result){
+        res.status(200).json(JSON.stringify(result));
+      })
+    })
+  }) 
 app.listen(process.env.PORT || 3000);
 console.log('server listening on ' + (process.env.PORT || 3000));
