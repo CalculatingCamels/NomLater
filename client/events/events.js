@@ -31,9 +31,10 @@ angular.module('nomLater.events', [])
   $scope.joinEvent = function(evt) {
     //dont add the user to the event if they are alreay apart of it. 
     if(!containsUser($scope.userInfo.name, evt)){
-      evt.attendees.push($scope.userInfo);
       Events.joinEvent(evt);
       CalendarFactory.startCalendar(evt);
+      $scope.addSuccess();
+      evt.attendees.push($scope.userInfo);
     } else {
       $scope.eventError();
     }
