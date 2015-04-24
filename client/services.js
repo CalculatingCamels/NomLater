@@ -96,7 +96,7 @@ angular.module('nomLater.services', [])
     gapi.auth.authorize({
       'client_id': CLIENT_ID,
       'scope': SCOPES,
-      'immediate': true
+      'immediate': false
     }, handleAuthResult);
   }
 
