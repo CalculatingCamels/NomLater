@@ -35,7 +35,8 @@
           <div class='location'>Location: <strong>{{event.location}}</strong></div>
           <div class='time'>Time: <strong>{{event.datetime | date : 'MM/dd/yyyy @ h:mma' }}</strong></div>        
           <div class='reservation' ng-if="event.reserve"><a href="{{event.reserve}}">Make a Reservation</a></div>   
-          <button class="submit-button action" ng-click='joinEvent(event)'>RSVP</button>
+          <button class="submit-button action" ng-click='joinEvent(event)' ng-hide='isAttending(event)'>RSVP</button>
+          <button class="submit-button leave" ng-click='leaveEvent(event)' ng-show='isAttending(event)'>Leave Event</button>
           <br>
           <button class="submit-button danger" ng-click="deleteEvent(event)" ng-if="userInfo.name===event.attendees[0].name">Cancel</button>
         </div>

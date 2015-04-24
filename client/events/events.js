@@ -8,6 +8,7 @@ angular.module('nomLater.events', [])
   $scope.eventJoinError = false;
   $scope.eventJoinSuccess = false;
   $scope.eventAddSuccess = false;
+  $scope.attendingEvent; 
   $scope.activeEventIndex;
 
   $scope.showForm = function() {
@@ -48,6 +49,19 @@ angular.module('nomLater.events', [])
     }, 1000);
   }
 
+  $scope.isAttending = function(evnt) {
+    for (var i=0; i < evnt.attendees.length; i++) {
+      if (evnt.attendees[i].name === $scope.userInfo.name) {
+        return true;
+      }
+    }
+    return false; 
+  }
+
+  $scope.leaveEvent = function(evt) {
+    // Will remove people from the google event and update the page
+  }
+
   $scope.joinEvent = function(evt) {
     //dont add the user to the event if they are alreay apart of it. 
     if(!containsUser($scope.userInfo.name, evt)){
@@ -58,18 +72,19 @@ angular.module('nomLater.events', [])
     } else {
       $scope.eventError();
     }
+    $scope.attendingEvent = true;
   }
 
   $scope.addEvent = function() {
-    
+
     if ($scope.newEvent.description !== "" &&
         $scope.newEvent.location !== "" &&
         $scope.newEvent.datetime !== "" ) {
 
           $scope.newEvent.attendees = [];
           $scope.newEvent.attendees.push({name: $scope.userInfo.name});
-          $scope.invalid = false
           $scope.eventsList.push($scope.newEvent);
+          $scope.invalid = false
 
           var loc = $scope.newEvent.location;
           $scope.invalid = false
@@ -81,9 +96,14 @@ angular.module('nomLater.events', [])
           })
           .then(function(newEvent) {
             CalendarFactory.startCalendar($scope.newEvent);
+
+            Events.getEvents()
+            .then(function(data) {
+              $scope.eventsList = data;
+            });
+
+            $scope.initNewEventForm();
             $scope.addSuccess();
-            // $scope.viewAllEvents();
-            $scope.initNewEventForm()
           });
 
     } else {
@@ -99,7 +119,6 @@ angular.module('nomLater.events', [])
       $scope.viewAllEvents();
     })
 
-    $scope.eventsLoaded = true;
   }
 
   $scope.initNewEventForm = function() {
