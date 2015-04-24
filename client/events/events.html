@@ -47,6 +47,11 @@
   <p>Success! Your Event was Added!</p>
 </div>
 
+<div ng-show="eventAddSuccess" class="absolute-center">
+  <i class="fa fa-check-circle-o fa-5x"></i>
+  <p>Nice! We've added {{event.attendees[0].name}}'s event to your calendar!</p>
+</div>
+ 
 <div ng-show="eventJoinError" class="absolute-center">
   <i class="fa fa-exclamation-circle fa-5x"></i> 
   <p>You're already going to this event!</p>
