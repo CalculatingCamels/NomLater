@@ -47,7 +47,7 @@ angular.module('nomLater.events', [])
   $scope.joinSuccess = function() {
     $scope.eventJoinSuccess = true;
     $timeout(function() {
-      $scope.eventJoinSuccess;
+      $scope.eventJoinSuccess = false;
     }, 1000);
   }
 
@@ -69,7 +69,7 @@ angular.module('nomLater.events', [])
     if(!containsUser($scope.userInfo.name, evt)){
       Events.joinEvent(evt);
       CalendarFactory.startCalendar(evt);
-      $scope.addSuccess();
+      $scope.joinSuccess();
       evt.attendees.push($scope.userInfo);
     } else {
       $scope.eventError();
