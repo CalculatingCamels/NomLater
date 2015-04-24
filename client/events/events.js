@@ -1,6 +1,6 @@
 angular.module('nomLater.events', [])
 
-.controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory, $timeout) {
+.controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory, $timeout, $interval) {
   $scope.eventsList = [];
   $scope.invalid = false
   $scope.shown = false
@@ -118,6 +118,13 @@ angular.module('nomLater.events', [])
       $scope.eventsList = data;
       $scope.eventsLoaded = true;
     });
+
+    $interval(function() {
+      Events.getEvents()
+      .then(function(data) {
+        $scope.eventsList = data;
+      })
+     }, 60000); 
 
   };
 
