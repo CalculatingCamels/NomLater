@@ -82,9 +82,10 @@
 
 .submit-button:focus {
   outline: none;
+}
+.submit-button:active{
   background: #a5a5a5;
 }
-
 .brand {
   height: 60px;
   width: 82px;
