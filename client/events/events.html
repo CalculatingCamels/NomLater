@@ -18,7 +18,7 @@
 
 <div id='container'>
 
-  <div class="events-header"><h3>Events in Your Network</h3></div>
+  <div class="events-header"><h3>Upcoming Events in Your Network</h3></div>
   <div class="spinner" ng-hide="eventsLoaded">
     <div class="cube1"></div>
     <div class="cube2"></div>
@@ -26,7 +26,7 @@
 
   <ul class="events" ng-show="eventsLoaded">
 
-    <li class = "event" ng-repeat="event in eventsList | orderBy:'datetime'">
+    <li class = "event" ng-repeat="(eventIndex, event) in eventsList | orderBy:'datetime'">
 
       <div class="row">
 
@@ -42,8 +42,11 @@
         </div>
 
         <div class="col-md-6 event-content-right">
-          <button class="submit-button" ng-click="">Guest List ({{event.attendees.length-1}})</button>
-          <div class='attendee' ng-repeat="attendee in event.attendees" ng-if="attendee !== event.attendees[0]" ng-show=""><a class="link" href="">@{{attendee.name}}</a></div>
+          <button class="submit-button" ng-click="showGuests(eventIndex)" ng-hide="isShowing(eventIndex)">Guest List ({{event.attendees.length}})</button>
+          <button class="submit-button" ng-click="hideGuests(eventIndex)" ng-show="isShowing(eventIndex)">Hide Guests</button>
+          <div class='attendee' ng-repeat="attendee in event.attendees" ng-show="isShowing(eventIndex)">
+            <a class="link" href="">@{{attendee.name}}</a>
+          </div>
         </div>
           
 

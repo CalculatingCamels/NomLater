@@ -7,12 +7,10 @@ angular.module('nomLater.services', [])
       method: 'GET',
       url: '/api/events'
     }).then(function(res) {
-      console.log(res.data)
       return res.data
     })
   };
 
-  
 
   var joinEvent = function(event) {
       return $http({
