@@ -7,10 +7,14 @@ angular.module('nomLater.events', [])
   $scope.eventsLoaded = false;
   $scope.eventJoinError = false;
   $scope.eventAddSuccess = false;
-
+  $scope.showGuestList = false;
 
   $scope.showForm = function() {
     $scope.shown = !$scope.shown;
+  }
+
+  $scope.viewGuests = function() {
+    $scope.showGuestList = !$scope.showGuestList;
   }
 
   $scope.eventError = function() {
