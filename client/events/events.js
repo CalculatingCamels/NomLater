@@ -147,20 +147,6 @@ angular.module('nomLater.events', [])
 
   };
 
-  $scope.nextPage = function() {
-    // need some way to limit how many pages people can go forward; it seems to get messed up if people 
-    // navigate past where there are no more results to show.
-    $scope.pageNumber++
-    $scope.viewAllEvents()
-  };
-  
-  $scope.prevPage = function() {
-    if ($scope.pageNumber > 0) {
-      $scope.pageNumber--
-      $scope.viewAllEvents()
-    }
-  };
-
   $scope.initUser = function(){
     if(!$rootScope.userInfo){
       $rootScope.userInfo = {};
