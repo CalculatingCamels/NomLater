@@ -4,7 +4,7 @@ angular.module('nomLater.events', [])
   $scope.eventsList = [];
   $scope.invalid = false
   $scope.shown = false
-  $scope.eventsLoaded = false;
+  $scope.eventsLoaded = true;
   $scope.eventJoinError = false;
   $scope.eventJoinSuccess = false;
   $scope.eventAddSuccess = false;
@@ -38,14 +38,14 @@ angular.module('nomLater.events', [])
     $scope.eventAddSuccess = true;
     $timeout(function() {
       $scope.eventAddSuccess = false;
-    }, 1500);
+    }, 1000);
   }
 
   $scope.joinSuccess = function() {
     $scope.eventJoinSuccess = true;
     $timeout(function() {
       $scope.eventJoinSuccess;
-    }, 1500);
+    }, 1000);
   }
 
   $scope.joinEvent = function(evt) {
@@ -66,8 +66,10 @@ angular.module('nomLater.events', [])
         $scope.newEvent.location !== "" &&
         $scope.newEvent.datetime !== "" ) {
 
+          $scope.newEvent.attendees = [];
+          $scope.newEvent.attendees.push({name: $scope.userInfo.name});
           $scope.invalid = false
-
+          $scope.eventsList.push($scope.newEvent);
 
           var loc = $scope.newEvent.location;
           $scope.invalid = false
@@ -80,7 +82,7 @@ angular.module('nomLater.events', [])
           .then(function(newEvent) {
             CalendarFactory.startCalendar($scope.newEvent);
             $scope.addSuccess();
-            $scope.viewAllEvents();
+            // $scope.viewAllEvents();
             $scope.initNewEventForm()
           });
 
@@ -89,9 +91,15 @@ angular.module('nomLater.events', [])
     }     
   }
 
-  $scope.deleteEvent = function(event) {
-    Events.deleteEvent(event);
-    $scope.viewAllEvents();
+  $scope.deleteEvent = function(evnt) {
+    $scope.eventsLoaded = false;
+
+    Events.deleteEvent(evnt)
+    .then(function() {
+      $scope.viewAllEvents();
+    })
+
+    $scope.eventsLoaded = true;
   }
 
   $scope.initNewEventForm = function() {

@@ -46,10 +46,10 @@ angular.module('nomLater.services', [])
   };
 
   var deleteEvent = function(evnt) {
+    console.log(evnt._id);
     return $http({
       method: 'DELETE',
-      url: '/api/events',
-      data: evnt
+      url: '/api/events/' + evnt._id
     }).then(function(res) {
       return res.data;
     })
@@ -110,17 +110,16 @@ angular.module('nomLater.services', [])
   }
 
   var handleAuthResult = function(authResult) {
+
     if (authResult && !authResult.error) {
       loadCalendarApi();
     } else {
-      // Show auth UI, allowing the user to initiate authorization by
-      // clicking authorize button.
-      // authorizeDiv.style.display = 'inline';
-      //TODO NEED TO POST ANGULAR ALERT DIV HERE.
+      handleAuthClick();
+      loadCalendarApi(); //Might not need this here since handleAuthClick calls this function again;
     }
   }
 
-  function handleAuthClick(event) {
+  var handleAuthClick = function(event) {
     gapi.auth.authorize(
       {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
       handleAuthResult);
