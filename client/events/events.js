@@ -1,7 +1,7 @@
 angular.module('nomLater.events', [])
 
 .controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory, $timeout) {
-  $scope.eventsList = {}
+  $scope.eventsList = [];
   $scope.invalid = false
   $scope.shown = false
   $scope.eventsLoaded = false;
@@ -18,19 +18,20 @@ angular.module('nomLater.events', [])
     $scope.eventJoinError = true;
     $timeout(function() {
       $scope.eventJoinError = false;
-    }, 2000);
+    }, 1500);
   }
 
   $scope.addSuccess = function() {
     $scope.eventAddSuccess = true;
     $timeout(function() {
       $scope.eventAddSuccess = false;
-    }, 2000);
+    }, 1500);
   }
 
   $scope.joinEvent = function(evt) {
     //dont add the user to the event if they are alreay apart of it. 
     if(!containsUser($scope.userInfo.name, evt)){
+      evt.attendees.push($scope.userInfo);
       Events.joinEvent(evt);
       CalendarFactory.startCalendar(evt);
     } else {
@@ -67,6 +68,11 @@ angular.module('nomLater.events', [])
     }     
   }
 
+  $scope.deleteEvent = function(event) {
+    Events.deleteEvent(event);
+    $scope.viewAllEvents();
+  }
+
   $scope.initNewEventForm = function() {
     $scope.newEvent = {}
     $scope.newEvent.description
@@ -78,7 +84,7 @@ angular.module('nomLater.events', [])
   $scope.viewAllEvents = function() {
     $scope.eventsLoaded = false;
 
-    Events.getEvents($scope.pageNumber)
+    Events.getEvents()
     .then(function(data) {
       $scope.eventsList = data;
       $scope.eventsLoaded = true;
@@ -121,9 +127,6 @@ angular.module('nomLater.events', [])
   $scope.viewAllEvents()
   $scope.initNewEventForm()
   $scope.initUser()
-
-
-   //~~~~~ HELPERS ~~~~~~
 
    var containsUser = function(name, evnt){
       for(var i = 0; i < evnt.attendees.length; i++){

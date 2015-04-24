@@ -36,6 +36,16 @@ angular.module('nomLater.services', [])
       });
   };
 
+  var deleteEvent = function(evnt) {
+    return $http({
+      method: 'DELETE',
+      url: '/api/events',
+      data: evnt
+    }).then(function(res) {
+      return res.data;
+    })
+  }
+
   var getUserInfo = function(){
     return $http({
       method: "GET",
@@ -50,6 +60,7 @@ angular.module('nomLater.services', [])
     getEvents : getEvents,
     joinEvent: joinEvent,
     addEvent : addEvent,
+    deleteEvent: deleteEvent,
     getUserInfo : getUserInfo
   };
 
