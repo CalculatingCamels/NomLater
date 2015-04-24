@@ -5,6 +5,7 @@
 .full-wrapper {
   margin: 0 auto;
   width: 70%;
+  overflow-y: scroll;
 }
 
 .wrapper {
@@ -165,7 +166,7 @@
 }
 
 .footer {
-  background-color:white;
+  background: none;
   text-align: center;
   font-size: 0.7em;
   position:absolute;
@@ -173,6 +174,16 @@
   width:100%;
   clear: all;
 }
+
+.full-wrap:after {
+  content: "";
+  display: block;
+}
+
+.footer, .full-wrap:after {
+
+}
+
 .footer p {
   margin:0;
 }
