@@ -1,4 +1,4 @@
-<div id="container">
+<div id="container" ng-controller='profileController'>
   <h3>My Events</h3>
   <ul class='events' ng-show="eventsLoaded">
     <li class = 'event' ng-repeat="event in eventsList | orderBy:'datetime'">
