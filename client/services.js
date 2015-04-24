@@ -33,7 +33,9 @@ angular.module('nomLater.services', [])
   };
 
   var addEvent = function(event) {
-      var datetime = new Date(event.date + ' ' + event.time);
+    var date = event.date.toISOString().substr(0,10);
+    var time = event.time.toISOString().substr(11,5);
+      var datetime = new Date(date + ' ' + time);
       var unix = datetime.getTime();
       event.datetime = unix;
       event.createdAt = new Date().getTime();

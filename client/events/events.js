@@ -76,10 +76,9 @@ angular.module('nomLater.events', [])
   }
 
   $scope.addEvent = function() {
-
+    debugger;
     if ($scope.newEvent.description !== "" &&
-        $scope.newEvent.location !== "" &&
-        $scope.newEvent.datetime !== "" ) {
+        $scope.newEvent.location !== "") {
 
           $scope.newEvent.attendees = [];
           $scope.newEvent.attendees.push({name: $scope.userInfo.name});
@@ -122,9 +121,11 @@ angular.module('nomLater.events', [])
   }
 
   $scope.initNewEventForm = function() {
+    console.log("HERE")
     $scope.newEvent = {}
     $scope.newEvent.time = new Date(new Date().toISOString().substr(0,16))
     $scope.newEvent.date = new Date()
+    console.log("THERE")
   }
 
   $scope.viewAllEvents = function() {
@@ -157,8 +158,8 @@ angular.module('nomLater.events', [])
       method: "GET",
       url: "https://opentable.herokuapp.com/api/restaurants?city=Austin&name=" + name
     }).then(function(r){ 
-      if(r.data.total_entries === 1) {
-       cb(r.data.restaurants[0].mobile_reserve_url);
+      if(r.data.total_entries >= 1) {
+       cb(r.data.restaurants[0].reserve_url);
       }   
     })
   }
