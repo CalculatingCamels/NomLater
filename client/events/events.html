@@ -1,0 +1,78 @@
+  <div class="show-add-event">
+    <button class="submit-button" id="add-event-button" ng-click="showForm()">Add an Event</button>
+  </div>
+
+  <div class='addevent fx-fade-down' ng-show="shown">
+    <form name="eventForm" ng-submit="addEvent()">
+      <input type= "text" placeholder="Event Location" ng-model = "newEvent.location">
+      <input type= "text" placeholder="Event Description" ng-model = "newEvent.description">
+      <input type= "date" ng-model = "newEvent.date">
+      <input type= "time" ng-model = "newEvent.time">
+      <button class="submit-button">Submit</button>
+      <h1 ng-if="invalid">
+        Please fill in all of the fields.
+      </h1>
+    </form>
+  </div>
+
+<div id='container'>
+
+  <div class="events-header"><h3>Upcoming Events in Your Network</h3></div>
+  <div class="spinner" ng-hide="eventsLoaded">
+    <div class="cube1"></div>
+    <div class="cube2"></div>
+  </div>
+
+  <ul class="events" ng-show="eventsLoaded">
+
+    <li class = "event" ng-repeat="(eventIndex, event) in eventsList | orderBy:'datetime'">
+
+      <div class="row">
+
+        <div class="col-md-6 event-content-left">
+          <div class='description'><h3><strong>{{event.description}}</strong><h3></div>
+          <div class='creator'><a class="link" href="">~ {{event.attendees[0].name}}</a></div>
+          <div class='location'>Location: <strong>{{event.location}}</strong></div>
+          <div class='time'>Time: <strong>{{event.datetime | date:'MM/dd/yyyy @ h:mma'}}</strong></div>        
+          <div class='reservation' ng-if="event.reserve"><a href="{{event.reserve}}" target="_blank">Make a Reservation</a></div>   
+          <button class="submit-button action" ng-click='joinEvent(event)' ng-hide='isAttending(event)'>RSVP</button>
+<!--           <button class="submit-button leave" ng-click='leaveEvent(event)' ng-show='isAttending(event)'>Leave Event</button>
+ -->          <br>
+          <button class="submit-button danger" ng-click="deleteEvent(event)" ng-if="userInfo.name===event.attendees[0].name">Cancel</button>
+        </div>
+
+        <div class="col-md-6 event-content-right ">
+          <button class="submit-button" ng-click="showGuests(eventIndex)" ng-hide="isShowing(eventIndex)">Guest List ({{event.attendees.length}})</button>
+          <button class="submit-button" ng-click="hideGuests(eventIndex)" ng-show="isShowing(eventIndex)">Hide Guests</button>
+          <div class='attendee fx-fade-down' ng-repeat="attendee in event.attendees" ng-show="isShowing(eventIndex)">
+            <a class="link" href="">@{{attendee.name}}</a>
+          </div>
+        </div>
+          
+
+          <hr>
+      </div><!-- END ROW -->    
+
+    </li>
+
+  </ul>
+
+  <div ng-show="eventAddSuccess" class="absolute-center fx-zoom-normal">
+    <i class="fa fa-check-circle-o fa-5x"></i> 
+    <p>Success! Your Event was Added!</p>
+  </div>
+
+  <div ng-show="eventJoinSuccess" class="absolute-center fx-zoom-normal">
+    <i class="fa fa-check-circle-o fa-5x"></i>
+    <p>Nice! We've added that event to your calendar!</p>
+  </div>
+
+  <div ng-show="eventJoinError" class="absolute-center fx-zoom-normal">
+    <i class="fa fa-exclamation-circle fa-5x"></i> 
+    <p>You're already going to this event!</p>
+  </div>
+
+</div>
+
+
+

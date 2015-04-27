@@ -1,13 +1,20 @@
+<div id='signin' class='container-fluid'>
 
- <div id='signin' ng-controller = "SignUpCtrl">
-   <h1>Sign in to find lunch companions now!</h1>
-   <h2>If you don't have an account, <a href="#/signup">sign up <strong>here!</strong>
-   </a></h2>
+  <div class="wrapper">
+  	<div class="brand-fill"><img src="./styles/brand.png"></div>
+    <!-- <div class="signin-banner"><h1>Welcome to NomLater</h1></div> -->
+    <div>
+    <p>"You don't need a silver fork to eat good food." <br> ~ <strong>Paul Prudhomme</strong></p>
+    </div>
+    <a href="/auth/google"><div class='google-signin'></div></a>
+  </div>
+  
 
-   <form name="signinForm" ng-submit='signin()'>
-     <input type='text' ng-model='user.username' required>
-     <input type='password' ng-model='user.password' required>
-     <button class="signin">Sign In</button>
-   </form>
- </div>
- 
+</div>
+
+<!-- <div class="footer">
+  <p><strong>NomLater</strong></p>
+  <p>Architects: Tyler L., Jamie S., Christian B., Brian S., and Charlie M.</p>
+  <p>&copy CalculatingCamels</p>
+</div>
+ -->

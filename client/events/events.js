@@ -1,87 +1,183 @@
 angular.module('nomLater.events', [])
 
-.controller('EventsController', function ($scope, $window, $location, Events) {
-
-  $scope.event = {}
-
-  //if $scope.invalid is true, it will display an error message in the view
+.controller('EventsController', function ($http, $scope, $rootScope, $window, $location, Events, CalendarFactory, $timeout, $interval) {
+  $scope.eventsList = [];
   $scope.invalid = false
+  $scope.shown = false
+  $scope.eventsLoaded = true;
+  $scope.eventJoinError = false;
+  $scope.eventJoinSuccess = false;
+  $scope.eventAddSuccess = false;
+  $scope.attendingEvent; 
+  $scope.activeEventIndex;
+  
+
+
+  $scope.showForm = function() {
+    $scope.shown = !$scope.shown;
+  }
+
+  $scope.showGuests = function(index) {
+    $scope.activeEventIndex = index;
+  }
+
+  $scope.hideGuests = function(index) {
+    $scope.activeEventIndex = null;
+  }
+
+  $scope.isShowing = function(index) {
+    return $scope.activeEventIndex === index;
+  }
+
+  $scope.eventError = function() {
+    console.log("eventError called!");
+    $scope.eventJoinError = true;
+    $timeout(function() {
+      $scope.eventJoinError = false;
+    }, 1500);
+  }
+
+  $scope.addSuccess = function() {
+    $scope.eventAddSuccess = true;
+    $timeout(function() {
+      $scope.eventAddSuccess = false;
+    }, 1000);
+  }
+
+  $scope.joinSuccess = function() {
+    $scope.eventJoinSuccess = true;
+    $timeout(function() {
+      $scope.eventJoinSuccess = false;
+    }, 1000);
+  }
+
+  $scope.isAttending = function(evnt) {
+    for (var i=0; i < evnt.attendees.length; i++) {
+      if (evnt.attendees[i].name === $scope.userInfo.name) {
+        return true;
+      }
+    }
+    return false; 
+  }
+
+  $scope.leaveEvent = function(evt) {
+    // Will remove people from the google event and update the page
+  }
 
   $scope.joinEvent = function(evt) {
-    $scope.event = evt;
-    var userToken = $window.localStorage.getItem('com.corgi');
-    Events.joinEvent(evt, userToken);
+    //dont add the user to the event if they are alreay apart of it. 
+    if(!containsUser($scope.userInfo.name, evt)){
+      Events.joinEvent(evt);
+      $scope.joinSuccess();
+      evt.attendees.push($scope.userInfo);
+      // CalendarFactory.startCalendar(evt);
+    } else {
+      $scope.eventError();
+    }
+    $scope.attendingEvent = true;
   }
 
   $scope.addEvent = function() {
-    // check that all fields in the events.html form are filled out
-    // need to add a check to make sure user is logged in
     if ($scope.newEvent.description !== "" &&
-        $scope.newEvent.location !== "" &&
-        $scope.newEvent.datetime !== "" ) {
-
+        $scope.newEvent.location !== "") {
+          $scope.newEvent.attendees = [];
+          $scope.newEvent.attendees.push({name: $scope.userInfo.name});
+          $scope.eventsList.push($scope.newEvent);
           $scope.invalid = false
-          var userToken = $window.localStorage.getItem('com.corgi');
+          console.log($scope.newEvent);
+          var loc = $scope.newEvent.location;
+          $scope.invalid = false
+          console.log("$scope newEvent: ", $scope.newEvent);
 
-          Events.addEvent($scope.newEvent, userToken)
+          openTable(loc, function(url){
+            $scope.newEvent.reserve = url;
+          }).then(function(x){
+            return Events.addEvent($scope.newEvent)
+          })
           .then(function(newEvent) {
-            // need a better way to notify people, but this is simple for now
-            alert('Your event has been created: ', newEvent.description);
-            // return to defaults
-            $scope.viewAllEvents();
-            $scope.initNewEventForm()
+            // CalendarFactory.startCalendar(newEvent);
+            Events.getEvents()
+            .then(function(data) {
+              $scope.eventsList = data;
+            });
+
+            $scope.initNewEventForm();
+            $scope.addSuccess();
           });
-        } else {
-          $scope.invalid = true
-        }     
+
+    } else {
+      $scope.invalid = true
+    }     
   }
 
-  // first page of events is page number 0; when more events are viewed, the page number is increased
-  $scope.pageNumber = 0
+  $scope.deleteEvent = function(evnt) {
+    $scope.eventsLoaded = false;
 
-  // eventsList is an array used in the template (with ng-repeat) to populate the list of events.
-  $scope.eventsList = {}
+    Events.deleteEvent(evnt)
+    .then(function() {
+      $scope.viewAllEvents();
+    })
+
+  }
 
   $scope.initNewEventForm = function() {
     $scope.newEvent = {}
-    $scope.newEvent.description = 'Describe the event.'
-    $scope.newEvent.location = 'Where is the event?'
-    $scope.newEvent.time = (new Date()).toTimeString().substr(0,5)
-    $scope.newEvent.date = new Date(new Date() + new Date().getTimezoneOffset()*60000).toISOString().substr(0,10)    
+    $scope.newEvent.time = new Date(new Date().toISOString().substr(0,16))
+    $scope.newEvent.date = new Date()
   }
 
   $scope.viewAllEvents = function() {
-    // send request to services.js, which in turn sends the actual http request to events-controller in the server.
+    $scope.eventsLoaded = false;
 
-    if ( $window.localStorage.getItem('com.corgi') ) {
-      Events.getEvents($scope.pageNumber)
+    Events.getEvents()
+    .then(function(data) {
+      $scope.eventsList = data;
+      $scope.eventsLoaded = true;
+    });
+
+    $interval(function() {
+      Events.getEvents()
       .then(function(data) {
-        // set $scope.eventsList equal to the data we get back from our http request - that's how we 
-        // populate the actual event views in the template.
         $scope.eventsList = data;
-      });
-    } else {
-      $location.path('/signin');
-    }
+      })
+     }, 60000); 
+
   };
 
-  $scope.nextPage = function() {
-    // need some way to limit how many pages people can go forward; it seems to get messed up if people 
-    // navigate past where there are no more results to show.
-    $scope.pageNumber++
-    $scope.viewAllEvents()
-  };
-  
-  $scope.prevPage = function() {
-    // only go back a page if the page number is greater than 0
-    if ($scope.pageNumber > 0) {
-      $scope.pageNumber--
-      $scope.viewAllEvents()
+  $scope.initUser = function(){
+    $scope.userLoaded = false;
+    if(!$rootScope.userInfo){
+      $rootScope.userInfo = {};
+      Events.getUserInfo()
+      .then(function() {
+        $scope.userLoaded = true;
+      });
     }
-  };
-  
-  // show events when the page is first loaded.
+  }
+
+  function openTable(name, cb){
+    return $http({
+      method: "GET",
+      url: "https://opentable.herokuapp.com/api/restaurants?city=Austin&name=" + name
+    }).then(function(r){ 
+      if(r.data.total_entries >= 1) {
+       cb(r.data.restaurants[0].reserve_url);
+      }   
+    })
+  }
+
+  $scope.initUser()
   $scope.viewAllEvents()
-  // populate new event form with default values
   $scope.initNewEventForm()
+
+   var containsUser = function(name, evnt){
+      for(var i = 0; i < evnt.attendees.length; i++){
+        if(evnt.attendees[i].name === name){
+          return true;
+        }
+      }
+      return false;
+   };
+
+
 })
