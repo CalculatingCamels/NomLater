@@ -65,7 +65,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     clientID: '1018800213856-k8g9toetpgsti0k09jt035cf0hou6har.apps.googleusercontent.com',
     clientSecret: 'sOSsJEp1p6xMx-CBY7xtfvCQ',
-    callbackURL: "http://calm-cliffs-3813.herokuapp.com/auth/google/callback",
+    callbackURL: "http://nomlater.herokuapp.com/auth/google/callback",
     passReqToCallback: true
   },
   function(request, accessToken, refreshToken, profile, done) {
