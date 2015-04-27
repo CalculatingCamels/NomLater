@@ -5,9 +5,7 @@
   "description": "Help people find new lunch partners.",
   "repository": "https://github.com/CalculatingCamels/NomLater.git",
   "scripts": {
-    "postinstall": "bower install",
-    "prestart": "npm install",
-    "start": "node server/server.js"
+    "postinstall": "bower install"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
