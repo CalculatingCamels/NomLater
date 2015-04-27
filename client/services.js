@@ -90,7 +90,7 @@ angular.module('nomLater.services', [])
 })
 .factory('CalendarFactory', function(){
   /*----------------------THESE VARIABLES ARE HERE TEMPORARILY-------------------------------*/
-  var CLIENT_ID = '211335492612-618pduc3omcj4rptt73svjba064gco3o.apps.googleusercontent.com';
+  var CLIENT_ID = '1018800213856-k8g9toetpgsti0k09jt035cf0hou6har.apps.googleusercontent.com';
 
   var SCOPES = ['https://www.googleapis.com/auth/calendar'];
 
